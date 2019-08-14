@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ $# -eq 0 ] ; then
+    echo "USAGE: $0 [-H] INPUT..." >&2
+    exit 1
+fi
+
+if [ $1 == "-H" ]; then
+    shift
+else
+    zcat $1 | head -n 1
+fi
+
+for infile in "${@}"
+do
+	zcat $infile | tail -n +2
+done
