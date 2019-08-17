@@ -14,15 +14,14 @@ mapping:
   aligners:
     - bwa
   refs:
-    - grandis
+    - genome
   samplesets:
     - all_samples
   ngm:
     sensitivity: 0.5
 
 refs:
-  grandis: /home/marcos/data/genomes_and_annotations/Sorghum/Sbicolor_454_v3.0.1.fa
-  mock: /home/marcos/Desktop/kevin/mock_data/genome.fa
+  genome: /home/marcos/Desktop/dna-proto-workflow/rawdata/reference/genome.fa
 
 denovodist:
   kwip_sketchsize: 1e9
@@ -44,13 +43,11 @@ varcall:
   aligners:
     - bwa
   callers:
-    - mpileup
-      #  - freebayes
+    #- mpileup
+    - freebayes
   refs:
-    #- grandis
-    - mock
+    - genome
   samplesets:
-    - test
     - all_samples
   filters:
     default: >
@@ -66,33 +63,4 @@ varcall:
           MAF >= 0.01'
     # Above is presence rate, >20%
 
-  # angsd:
-  #   chunksize: 1000000
-  #   filters:
-  #     angsd_default:  "-SNP_pval 1e-3  -minMaf 0.0001 -minInd 10 -setMinDepth 10 -minQ 10"
-  #     perloc_default:  "-SNP_pval 1e-3  -minMaf 0.0001 -setMinDepth 3 -minQ 10"
-  #   aligners:
-  #     - bwa
-  #   refs:
-  #     - grandisv2chl
-  #   samplesets:
-  #     - Project2-sideroxylon-no-outlier
-  #   locationsets:
-  #     - loc01_alb
-  #
-  # pcangsd:
-  #   angsd_chunksize: 100000
-  #   aligners:
-  #     - bwa
-  #   refs:
-  #     - grandisv2chl
-  #   samplesets:
-  #     - Project2-albens-no-outlier
-  #   nsnps:
-  #     - 100000
-  #   reps: 20
-  #   angsd_filters: "-SNP_pval 1e-4 -doMaf 2 -doPost 1  -minMaf 0.01 -minInd 50"
-  #   admix:
-  #     K: [1,2,3,4,5,6]
-  #     alpha: ["0.0", 0.001, 0.01, 0.1, 0.2]
-  #     seeds: [1, 2, 3, 5, 7]
+
