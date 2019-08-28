@@ -1,0 +1,14 @@
+name: paneuc
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.*
+  - snakemake
+  - bwa
+  - samtools
+  - bcftools
+  - qualimap
+  - AdapterRemoval
+  - seqhax
+  - pigz

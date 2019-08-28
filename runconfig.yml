@@ -1,0 +1,11 @@
+
+abra2:
+  memory:
+    - Xmx4g
+  release:
+    - envs/abra2.jar
+  temp:
+    - /tmp
+  regions:
+    - rawdata/regions/chr04.bed
+

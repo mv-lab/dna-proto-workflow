@@ -1,18 +1,22 @@
 
-include: "rules/common.smk"
+include: "rules/common.rules.smk"
 
 ##### Modules #####
 
-include: "rules/denovo.smk"
-include: "rules/readqc.smk"
-include: "rules/mapping.smk"
-include: "rules/calling.smk"
+include: "rules/denovo.rules.smk"
+include: "rules/readqc.rules.smk"
+include: "rules/align.rules.smk"
+include: "rules/varcall.rules.smk"
+include: "rules/stats.rules.smk"
+include: "rules/abra2.rules.smk"
 
 ##### Target rules #####
 
 rule all:
     input:
-        rules.denovo.input,
+        #rules.denovo.input,
         rules.reads.input,
         rules.align.input,
+        rules.abra2.output,
         rules.varcall.input,
+        #rules.stats.input,

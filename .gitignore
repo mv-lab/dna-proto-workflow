@@ -1,2 +1,15 @@
 # ignore .snakemake
 .snakemake/
+
+command
+
+# ignore mock data (backup)
+mockdata/
+
+# PyCache
+
+.*__pycache__
+
+# rawdata
+
+rawdata/
