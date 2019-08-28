@@ -1,15 +1,20 @@
-# ignore .snakemake
+# Ignore .snakemake
 .snakemake/
 
+# Ignore notes, txt etc
 command
 
-# ignore mock data (backup)
+# Ignore mock data (backup)
 mockdata/
 
 # PyCache
-
 .*__pycache__
 
-# rawdata
+# generated data files
+data/
 
-rawdata/
+# rawdata (size problem)
+
+rawdata/reference/*
+rawdata/snpeffdata/genomes/*
+

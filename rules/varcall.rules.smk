@@ -117,35 +117,13 @@ rule mpileup:
         " ) >{log} 2>&1"
 
 
-rule bcfnorm:
+rule bcffilter:
     input:
         bcf="data/variants/raw_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf",
         ref=lambda wc: config['refs'][wc.ref],
     output:
-        # Not a pipe! can't run multiple filters if a pipe
-        bcf=temp("data/variants/norm_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf"),
-    log:
-        "data/log/bcfnormalise/{caller}~{aligner}~{ref}~{sampleset}/{region}.log"
-    shell:
-        "( bcftools norm"
-        "   --fasta-ref {input.ref}"
-        "   -O u"
-        "   {input.bcf}"
-        " | vt decompose_blocksub + -o -" # decompose MNP to multipe SNPs
-        " | bcftools norm" # Split multi-alleics
-        "   --fasta-ref {input.ref}"
-        "   --do-not-normalize"
-        "   --multiallelics -snps"
-        "   -O u  -o {output.bcf}"
-        " ) >{log} 2>&1"
-
-rule bcffilter:
-    input:
-        bcf="data/variants/norm_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf",
-        ref=lambda wc: config['refs'][wc.ref],
-    output:
         # Not a pipe! can't run all regions separately if this is a pipe into merge
-        bcf=temp("data/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf"),
+        bcf="data/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
     log:
         "data/log/bcffilter/{caller}~{aligner}~{ref}~{sampleset}/{filter}/{region}.log"
     params:
@@ -153,14 +131,10 @@ rule bcffilter:
     shell:
         "( bcftools view"
         "   {params.filtarg}"
-        "   -O u"
         "   {input.bcf}"
-        " | bcftools norm" # We normalise here to re-join multi-allelic sites, after filtering with multi-allelics split
-        "   --fasta-ref {input.ref}"
-        "   --do-not-normalize"
-        "   --multiallelics +snps" # Split multi-alleic sites
         "   -O b  -o {output.bcf}"
         " ) >{log} 2>&1"
+
 
 localrules: bcfmerge_fofn
 rule bcfmerge_fofn:
