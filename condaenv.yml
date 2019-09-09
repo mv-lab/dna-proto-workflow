@@ -1,12 +1,18 @@
-name: paneuc
+name: sandbox
 channels:
-  - conda-forge
+  - defaults
   - bioconda
+  - conda-forge
 dependencies:
   - python=3.*
   - snakemake
   - bwa
+  - freebayes
+  - vt
   - samtools
   - bcftools
+  - bedops
   - qualimap
   - AdapterRemoval
+  - seqhax
+  - pigz
