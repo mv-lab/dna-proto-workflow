@@ -1,7 +1,0 @@
-#dowloaded Sorghum genome fasta and gff from Ensemble February 25, 2019
-#genome
-ftp://ftp.ensemblgenomes.org/pub/plants/release-42/fasta/sorghum_bicolor/dna/Sorghum_bicolor.Sorghum_bicolor_NCBIv3.dna.toplevel.fa.gz
-#annotation
-ftp://ftp.ensemblgenomes.org/pub/plants/release-42/gff3/sorghum_bicolor/Sorghum_bicolor.Sorghum_bicolor_NCBIv3.42.gff3.gz
-
-

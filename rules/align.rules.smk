@@ -4,6 +4,21 @@
 #######################################################################
 
 
+# Check if bwa can workflow
+
+import os
+is_bwa_amb = os.path.exists('rawdata/reference/genome.fa.amb')
+is_bwa_ann = os.path.exists('rawdata/reference/genome.fa.ann')
+is_bwa_bwt = os.path.exists('rawdata/reference/genome.fa.bwt')
+
+print ('Bwa required files are ready? ', is_bwa_amb and is_bwa_ann and is_bwa_bwt)
+
+if (not is_bwa_amb) | (not is_bwa_ann)| (not is_bwa_bwt):
+    print ('>> Preparing bwa required files...')
+    #os.system('bwa index rawdata/reference/genome.fa')
+    print ('Done!')
+
+
 ##### Target rules #####
 
 

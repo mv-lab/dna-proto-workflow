@@ -1,5 +1,5 @@
 
-include: "rules/common.rules.smk"
+include: "rules/init.rules.smk"
 
 ##### Modules #####
 
@@ -12,11 +12,12 @@ include: "rules/abra2.rules.smk"
 
 ##### Target rules #####
 
+
 rule all:
     input:
         #rules.denovo.input,
         rules.reads.input,
         rules.align.input,
-        rules.abra2.output,
+        #rules.abra2.output,
         rules.varcall.input,
         #rules.stats.input,
