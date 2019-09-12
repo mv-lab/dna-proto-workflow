@@ -28,7 +28,7 @@ rule reads:
 
 ##### Actual rules #####
 
-ruleorder: qcreads > qcreads_il
+ruleorder: qcreads_il > qcreads
 rule qcreads:
     input:
         r1="rawdata/runs/{run}/{lib}_R1.fastq.gz",

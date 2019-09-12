@@ -1,6 +1,5 @@
 run,library,sample,Include
-run_1,A,A,Y
-run_1,B1,B,Y
-run_1,B2,B,Y
-run_1,C,C,Y
-run_2,C,C,Y
+run_1,con,con,Y
+run_1,D2,D2,Y
+run_1,D3,D3,Y
+

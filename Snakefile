@@ -18,6 +18,6 @@ rule all:
         #rules.denovo.input,
         rules.reads.input,
         rules.align.input,
-        #rules.abra2.output,
+        rules.abra2.output,
         rules.varcall.input,
-        #rules.stats.input,
+        rules.stats.input,

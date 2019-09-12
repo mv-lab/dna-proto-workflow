@@ -6,9 +6,11 @@ command
 
 # Ignore mock data (backup)
 mockdata/
+oldtoy/
 
 # PyCache
 .*__pycache__
+utils/__pycache__/
 
 # generated data files
 data/
@@ -18,4 +20,5 @@ data/
 rawdata/reference/*
 rawdata/snpeffdata/genomes/*
 
+dag.svg
 toydata/

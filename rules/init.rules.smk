@@ -5,8 +5,8 @@
 from utils import snkmk
 import os
 
-configfile: "toolconfig.yml"
-configfile: "runconfig.yml"
+configfile: "configs/toolconfig.yml"
+configfile: "configs/runconfig.yml"
 report: "../report/workflow.rst"
 
 
