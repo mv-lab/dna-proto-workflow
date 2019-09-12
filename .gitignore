@@ -17,7 +17,7 @@ data/
 
 # rawdata (size problem)
 
-rawdata/reference/*
+#rawdata/reference/*
 rawdata/snpeffdata/genomes/*
 
 dag.svg
