@@ -19,6 +19,11 @@ if not is_fai:
     print ('Done!')
 
 
+# Prepare contigs of interest (bed)
+print ('Prepating contigs of interest ...')
+os.system(r"awk r'BEGIN {FS='\t'}; {print $1 FS '0' FS $2}' rawdata/reference/genome.fa.fai > metadata/contigs_of_interest.bed")
+
+
 RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp("metadata/sample2runlib.csv")
 
 SAMPLESETS = snkmk.make_samplesets(s2rl_file="metadata/sample2runlib.csv",

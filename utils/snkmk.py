@@ -13,6 +13,14 @@ def parsefai(fai):
             clen = int(clen)
             yield cname, clen
 
+def parsebed(bed):
+    names = []
+    with open(bed) as bd:
+        for l in bd:
+            name = l.split()[0]
+            names.append(name)
+    return names
+
 
 def make_regions(rdict, window=1e6, base=1):
     window = int(window)
@@ -22,8 +30,11 @@ def make_regions(rdict, window=1e6, base=1):
         windows = []
         curwin = []
         curwinlen = 0
+        contigs_of_interest = parsebed('metadata/contigs_of_interest.bed')
+
         for cname, clen in parsefai(fai):
-            if cname.lower().startswith("chr"):
+            if cname in contigs_of_interest:
+                print ('>> ', cname)
                 for start in range(0, clen, window):
                     wlen = min(clen - start, window)
                     windows.append("{}:{:09d}-{:09d}".format(cname, start + base, start+wlen))

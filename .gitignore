@@ -7,6 +7,7 @@ command
 # Ignore mock data (backup)
 mockdata/
 oldtoy/
+backup
 
 # PyCache
 .*__pycache__
