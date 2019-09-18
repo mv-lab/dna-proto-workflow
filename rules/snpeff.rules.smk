@@ -1,13 +1,14 @@
+
 rule snpeff:
     input:
-        "filtered/all.vcf.gz",
+        "data/variants/final/freebayes~bwa~genome~all_samples~filtered-default.vcf.gz",
     output:
-        vcf=report("annotated/all.vcf.gz", caption="../report/vcf.rst", category="Calls"),
+        vcf="annotated/all.vcf.gz",
         csvstats="snpeff/all.csv"
     log:
-        "logs/snpeff.log"
+        "data/log/snpeff/snpeff.log"
     params:
-        reference=config["ref"]["name"],
+        reference=config["snpeff"]['name'],
         extra="-Xmx6g"
     wrapper:
         "0.27.1/bio/snpeff"

@@ -37,7 +37,6 @@ rule filtered_variants:
                sampleset=config["varcall"]["samplesets"],
                filter=config["varcall"]["filters"]),
 
-
 rule varcall:
     input:
         rules.filtered_variants.input,
@@ -76,8 +75,10 @@ rule abra2:
 
 rule freebayes:
     input:
-        bam="data/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
-        bai="data/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
+        bam = "data/abra/{aligner}~{ref}~{sampleset}.bam",
+        bai = "data/abra/{aligner}~{ref}~{sampleset}.bam.bai",
+        #bam="data/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
+        #bai="data/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
         sset="data/samplelists/{sampleset}.txt",
         ref=lambda wc: config['refs'][wc.ref],
     output:
@@ -204,6 +205,7 @@ rule bcfmerge:
         "   -o {output.bcf}"
         "   --file-list {input.fofn}"
         " ) >{log} 2>&1"
+
 
 rule bcf2vcf:
     input:

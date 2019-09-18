@@ -20,6 +20,7 @@ data/
 
 #rawdata/reference/*
 rawdata/snpeffdata/genomes/*
+rawdata/snpeffdata/*
 
-#dag.svg
+dag.svg
 toydata/
