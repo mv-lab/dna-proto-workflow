@@ -4,23 +4,7 @@
 #######################################################################
 
 
-# Check if bwa can workflow
-
-import os
-is_bwa_amb = os.path.exists('rawdata/reference/genome.fa.amb')
-is_bwa_ann = os.path.exists('rawdata/reference/genome.fa.ann')
-is_bwa_bwt = os.path.exists('rawdata/reference/genome.fa.bwt')
-
-print ('Bwa required files are ready? ', is_bwa_amb and is_bwa_ann and is_bwa_bwt)
-
-if (not is_bwa_amb) | (not is_bwa_ann)| (not is_bwa_bwt):
-    print ('>> Preparing bwa required files...')
-    #os.system('bwa index rawdata/reference/genome.fa')
-    print ('Done!')
-
-
 ##### Target rules #####
-
 
 localrules: align_samples
 rule align_samples:
@@ -66,6 +50,14 @@ rule align:
 
 ##### Actual rules #####
 
+rule align_prepare_reference:
+    input:
+        "rawdata/reference/genome.fa"
+    output:
+        expand("rawdata/reference/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"])
+    shell:
+        "bwa index {input}"
+
 
 rule ngmap:
     input:
@@ -94,6 +86,7 @@ rule ngmap:
 
 rule bwamem:
     input:
+        expand("rawdata/reference/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"]),
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
         ref=lambda wc: config['refs'][wc.ref],
     output:

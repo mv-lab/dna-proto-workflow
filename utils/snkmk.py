@@ -6,6 +6,10 @@ import os
 from sys import stderr
 
 
+def create_contigs():
+    pass
+
+
 def parsefai(fai):
     with open(fai) as fh:
         for l in fh:
@@ -34,7 +38,7 @@ def make_regions(rdict, window=1e6, base=1):
 
         for cname, clen in parsefai(fai):
             if cname in contigs_of_interest:
-                print ('>> ', cname)
+                #print ('>> ', cname)
                 for start in range(0, clen, window):
                     wlen = min(clen - start, window)
                     windows.append("{}:{:09d}-{:09d}".format(cname, start + base, start+wlen))
@@ -118,3 +122,7 @@ def make_samplesets(s2rl_file, setfile_glob):
                 for s in sorted(setsamps):
                     print(s, file=fh)
     return {n: list(sorted(set(s))) for n, s in ssets.items()}
+
+
+
+

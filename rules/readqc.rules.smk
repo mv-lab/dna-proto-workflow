@@ -3,6 +3,11 @@
 #######################################################################
 
 
+RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp("metadata/sample2runlib.csv")
+
+SAMPLESETS = snkmk.make_samplesets(s2rl_file="metadata/sample2runlib.csv", setfile_glob="metadata/samplesets/*.txt")
+
+
 ##### Target rules #####
 
 rule qc_runlib:
@@ -19,7 +24,7 @@ rule qc_samples:
     input:
         expand("data/reads/samples/{sample}.fastq.gz", sample=SAMP2RUNLIB),
 
-rule reads:
+rule readqc:
     input:
         rules.qc_runlib.input,
         rules.read_stats.input,
@@ -106,7 +111,7 @@ localrules: samplefastq
 rule samplefastq:
     input:
         lambda wc: ["data/reads/runs/{run}/{lib}.fastq.gz".format(run=r, lib=l) for r, l in SAMP2RUNLIB[wc.sample]],
-    output: pipe("data/reads/samples/{sample}.fastq.gz")
+    output: "data/reads/samples/{sample}.fastq.gz"
     log: "data/log/samplefastq/{sample}.log"
     threads: 1
     shell:

@@ -1,14 +1,21 @@
 name: paneuc
 channels:
-  - conda-forge
+  - defaults
   - bioconda
+  - conda-forge
 dependencies:
   - python=3.*
   - snakemake
   - bwa
+  - freebayes
+  - vt
   - samtools
   - bcftools
+  - bedops
   - qualimap
   - AdapterRemoval
   - seqhax
   - pigz
+  - matplotlib =2.2
+  - pandas =0.23
+  - seaborn =0.8

@@ -3,6 +3,8 @@
 #######################################################################
 
 
+VARCALL_REGIONS = snkmk.make_regions(config["refs"], window=config["varcall"]["chunksize"])
+
 ##### Target rules #####
 
 def raw_variant_calls_input(wildcards):
@@ -22,6 +24,11 @@ rule raw_variant_calls:
 
 rule filtered_variants:
     input:
+        expand("data/abra/{aligner}~{ref}~{sampleset}.bam",
+                aligner=config["varcall"]["aligners"],
+                ref=config["varcall"]["refs"],
+                sampleset=config["varcall"]["samplesets"]),
+
         expand("data/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.{ext}",
                ext=["bcf", "bcf.csi", "vcf.gz", "vcf.gz.csi"],
                caller=config["varcall"]["callers"],
@@ -30,12 +37,42 @@ rule filtered_variants:
                sampleset=config["varcall"]["samplesets"],
                filter=config["varcall"]["filters"]),
 
+
 rule varcall:
     input:
         rules.filtered_variants.input,
 
 
 ##### Actual rules #####
+
+rule abra2:
+    input:
+        "data/alignments/sets/{aligner}~{ref}~all_samples.bam",
+        ref=lambda wc: config['refs'][wc.ref],
+    output:
+        "data/abra/{aligner}~{ref}~{sampleset}.bam",
+    log:
+        "data/log/abra/{aligner}~{ref}~{sampleset}.log"
+    benchmark:
+        "data/log/abra/{aligner}~{ref}~{sampleset}.benchmark"
+    threads: 4
+    params:
+        region = config['abra2']['regions'],
+        abra_temp = config['abra2']['temp'],
+        abra_release = config['abra2']['release'],
+        mem= config['abra2']['memory'],
+    shell:
+        "( java"
+        "   -{params.mem}"
+        "   -jar {params.abra_release}"
+        "   --in {input}"
+        "   --out {output}"
+        "   --ref rawdata/reference/genome.fa"
+        "   --threads 4"
+        "   --targets {params.region}"
+        "   --tmpdir {params.abra_temp}"
+        ") >{log} 2>&1"
+
 
 rule freebayes:
     input:
@@ -167,7 +204,6 @@ rule bcfmerge:
         "   -o {output.bcf}"
         "   --file-list {input.fofn}"
         " ) >{log} 2>&1"
-
 
 rule bcf2vcf:
     input:

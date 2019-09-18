@@ -7,5 +7,4 @@ abra2:
   temp:
     - /tmp
   regions:
-    - rawdata/regions/chr04.bed
-
+    - metadata/contigs_of_interest.bed

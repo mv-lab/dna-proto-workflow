@@ -11,4 +11,3 @@ rule snpeff:
         extra="-Xmx6g"
     wrapper:
         "0.27.1/bio/snpeff"
-

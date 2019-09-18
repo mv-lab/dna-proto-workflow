@@ -11,25 +11,48 @@ report: "../report/workflow.rst"
 
 
 # Check if the reference is ready
+
+"""
 is_fai = os.path.exists('rawdata/reference/genome.fa.fai')
 print ('Reference is ready? ', is_fai)
 if not is_fai:
     print ('>> Preparing reference...')
-    os.system('samtools faidx rawdata/reference/genome.fa')
+    os.system('samtools faidx rawdata/reference/genome.fa ')
     print ('Done!')
+"""
+
+rule prepare_ref:
+    input:
+        "rawdata/reference/genome.fa"
+    output:
+        "rawdata/reference/genome.fa.fai"
+    log:
+        "data/log/reference/fai.txt"
+    shell:
+        "samtools faidx {input} 2> {log}"
 
 
 # Prepare contigs of interest (bed)
-print ('Prepating contigs of interest ...')
-os.system(r"awk r'BEGIN {FS='\t'}; {print $1 FS '0' FS $2}' rawdata/reference/genome.fa.fai > metadata/contigs_of_interest.bed")
+
+#print ('Prepating contigs of interest ...')
+#os.system(r"awk r'BEGIN {FS='\t'}; {print $1 FS '0' FS $2}' rawdata/reference/genome.fa.fai > metadata/contigs_of_interest.bed")
+
+rule contigs:
+    input:
+        "rawdata/reference/genome.fa.fai"
+    output:
+        "metadata/contigs_of_interest.bed"
+    params:
+        code = r'BEGIN {FS="\t"}; {print $1 FS "0" FS $2}'
+    log:
+        "data/log/contigs/contigs.txt"
+    shell:
+        "awk '{params.code}' {input} > {output} 2> {log}"
 
 
-RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp("metadata/sample2runlib.csv")
-
-SAMPLESETS = snkmk.make_samplesets(s2rl_file="metadata/sample2runlib.csv",
-                                   setfile_glob="metadata/samplesets/*.txt")
-
-VARCALL_REGIONS = snkmk.make_regions(config["refs"], window=config["varcall"]["chunksize"])
+#RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp("metadata/sample2runlib.csv")
+#SAMPLESETS = snkmk.make_samplesets(s2rl_file="metadata/sample2runlib.csv", setfile_glob="metadata/samplesets/*.txt")
+#VARCALL_REGIONS = snkmk.make_regions(config["refs"], window=config["varcall"]["chunksize"])
 
 shell.prefix = "set -euo pipefail; "
 
@@ -40,3 +63,9 @@ wildcard_constraints:
     sample="[^/]+",
     ref="[^/]+",
     type="[^/]+",
+
+
+rule init:
+    input:
+        rules.contigs.output,
+        rules.prepare_ref.output,
