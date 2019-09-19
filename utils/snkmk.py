@@ -10,20 +10,14 @@ from sys import stderr
 def create_contigs_file():
     # Prepare contigs of interest (bed)
     is_contigs = os.path.exists('metadata/contigs_of_interest.bed')
-    print ('Contig file is ready? ', is_contigs)
     if not is_contigs:
-        print ('Prepating contigs of interest ...')
         os.system(r'awk -f utils/contigs.bed.awk rawdata/reference/genome.fa.fai > metadata/contigs_of_interest.bed')
-    print ('Done')
 
 
 def create_fai():
     is_fai = os.path.exists('rawdata/reference/genome.fa.fai')
-    print ('Reference is ready? ', is_fai)
     if not is_fai:
-        print ('>> Preparing reference...')
         os.system('samtools faidx rawdata/reference/genome.fa ')
-    print ('Done!')
 
 
 def parsefai(fai):

@@ -1,0 +1,37 @@
+rawdata/
+├── readme
+├── reference
+│   ├── genome.fa
+│   ├── genome.fa.amb
+│   ├── genome.fa.ann
+│   ├── genome.fa.bwt
+│   ├── genome.fa.fai
+│   ├── genome.fa.pac
+│   └── genome.fa.sa
+├── runs
+│   ├── run_1
+│   │   ├── con.fastq.gz
+│   │   ├── D2.fastq.gz
+│   │   └── D3.fastq.gz
+│   └── run_2
+│       └── con.fastq.gz
+└── snpeffdata
+    ├── genomes
+    │   └── Sorghum_bicolor_NCBIv3.42.fa.gz
+    ├── Readme
+    └── Sorghum_bicolor_NCBIv3.42
+        ├── genes.gtf.gz
+        ├── sequence.10.bin
+        ├── sequence.1.bin
+        ├── sequence.2.bin
+        ├── sequence.3.bin
+        ├── sequence.4.bin
+        ├── sequence.5.bin
+        ├── sequence.6.bin
+        ├── sequence.7.bin
+        ├── sequence.8.bin
+        ├── sequence.9.bin
+        ├── sequence.bin
+        └── snpEffectPredictor.bin
+
+7 directories, 27 files

@@ -67,7 +67,7 @@ rule abra2:
         "   --in {input}"
         "   --out {output}"
         "   --ref rawdata/reference/genome.fa"
-        "   --threads 4"
+        "   --threads 5"
         "   --targets {params.region}"
         "   --tmpdir {params.abra_temp}"
         ") >{log} 2>&1"

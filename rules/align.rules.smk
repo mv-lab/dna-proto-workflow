@@ -27,7 +27,7 @@ rule align_stats:
                type=["SN", "IS", "COV"])
     log: "data/log/bamstats/mergeallbamstats.log"
     shell:
-        "python3 ./scripts/tidybamstat.py"
+        "python3 scripts/tidybamstat.py"
         "   -o data/alnstats/everything"  # prefix
         "   {input}"
         ">{log} 2>&1"
@@ -36,7 +36,7 @@ rule align_stats:
 rule align:
    input:
         rules.align_samples.input,
-        rules.align_stats.input,
+        rules.align_stats.output,
         expand("data/alignments/sets/{aligner}~{ref}~all_samples.bam",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"]),
@@ -46,6 +46,10 @@ rule align:
         expand("data/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"]),
+        expand("data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
+               aligner=config["mapping"]["aligners"],
+               ref=config["mapping"]["refs"],
+               sample=SAMPLESETS["all_samples"]),
 
 
 ##### Actual rules #####
@@ -138,7 +142,6 @@ rule bam_markdups_sort:
         " ) >{log} 2>&1"
 
 
-
 rule mergebam_samp:
     input:
         lambda wc: ["data/alignments/byrun/{aln}/{ref}/{run}/{lib}.bam".format(
@@ -163,7 +166,7 @@ rule qualimap_samp:
     input:
         bam="data/alignments/samples/{aligner}/{ref}/{sample}.bam",
     output:
-        directory("data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/"),
+        "data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
     log:
         "data/log/qualimap_sample/{aligner}~{ref}~{sample}.log"
     threads: 4
@@ -265,14 +268,6 @@ rule align_librun:
                         for a in config["mapping"]["aligners"]
                         for ref in config["mapping"]["refs"]],
 
-
-localrules: align_qualimap_samples
-rule align_qualimap_samples:
-    input:
-        expand(directory("data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/"),
-               aligner=config["mapping"]["aligners"],
-               ref=config["mapping"]["refs"],
-               sample=SAMP2RUNLIB),
 
 rule align_samplesets_all:
     # Currently there's no real need for this, as all variant calling uses the mega-bam

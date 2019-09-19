@@ -1,0 +1,342 @@
+data/
+├── abra
+│   ├── bwa~genome~all_samples.bam
+│   └── bwa~genome~all_samples.bam.bai
+├── alignments
+│   ├── bamlists
+│   │   └── bwa~genome~all_samples.bamlist
+│   ├── bamstats
+│   │   └── sample
+│   │       ├── bwa~genome~con.tsv
+│   │       ├── bwa~genome~D2.tsv
+│   │       └── bwa~genome~D3.tsv
+│   ├── byrun
+│   │   └── bwa
+│   │       └── genome
+│   │           ├── run_1
+│   │           └── run_2
+│   ├── byrun.raw
+│   │   └── bwa
+│   │       └── genome
+│   │           ├── run_1
+│   │           └── run_2
+│   ├── qualimap
+│   │   └── samples
+│   │       ├── bwa~genome~con
+│   │       │   ├── css
+│   │       │   │   ├── agogo.css
+│   │       │   │   ├── ajax-loader.gif
+│   │       │   │   ├── basic.css
+│   │       │   │   ├── bgfooter.png
+│   │       │   │   ├── bgtop.png
+│   │       │   │   ├── comment-bright.png
+│   │       │   │   ├── comment-close.png
+│   │       │   │   ├── comment.png
+│   │       │   │   ├── doctools.js
+│   │       │   │   ├── down.png
+│   │       │   │   ├── down-pressed.png
+│   │       │   │   ├── file.png
+│   │       │   │   ├── jquery.js
+│   │       │   │   ├── minus.png
+│   │       │   │   ├── plus.png
+│   │       │   │   ├── pygments.css
+│   │       │   │   ├── qualimap_logo_small.png
+│   │       │   │   ├── report.css
+│   │       │   │   ├── searchtools.js
+│   │       │   │   ├── underscore.js
+│   │       │   │   ├── up.png
+│   │       │   │   ├── up-pressed.png
+│   │       │   │   └── websupport.js
+│   │       │   ├── genome_results.txt
+│   │       │   ├── images_qualimapReport
+│   │       │   │   ├── genome_coverage_0to50_histogram.png
+│   │       │   │   ├── genome_coverage_across_reference.png
+│   │       │   │   ├── genome_coverage_histogram.png
+│   │       │   │   ├── genome_coverage_quotes.png
+│   │       │   │   ├── genome_gc_content_per_window.png
+│   │       │   │   ├── genome_homopolymer_indels.png
+│   │       │   │   ├── genome_insert_size_across_reference.png
+│   │       │   │   ├── genome_insert_size_histogram.png
+│   │       │   │   ├── genome_mapping_quality_across_reference.png
+│   │       │   │   ├── genome_mapping_quality_histogram.png
+│   │       │   │   ├── genome_reads_clipping_profile.png
+│   │       │   │   ├── genome_reads_content_per_read_position.png
+│   │       │   │   └── genome_uniq_read_starts_histogram.png
+│   │       │   ├── qualimapReport.html
+│   │       │   └── raw_data_qualimapReport
+│   │       │       ├── coverage_across_reference.txt
+│   │       │       ├── coverage_histogram.txt
+│   │       │       ├── duplication_rate_histogram.txt
+│   │       │       ├── genome_fraction_coverage.txt
+│   │       │       ├── homopolymer_indels.txt
+│   │       │       ├── insert_size_across_reference.txt
+│   │       │       ├── insert_size_histogram.txt
+│   │       │       ├── mapped_reads_clipping_profile.txt
+│   │       │       ├── mapped_reads_gc-content_distribution.txt
+│   │       │       ├── mapped_reads_nucleotide_content.txt
+│   │       │       ├── mapping_quality_across_reference.txt
+│   │       │       └── mapping_quality_histogram.txt
+│   │       ├── bwa~genome~D2
+│   │       │   ├── css
+│   │       │   │   ├── agogo.css
+│   │       │   │   ├── ajax-loader.gif
+│   │       │   │   ├── basic.css
+│   │       │   │   ├── bgfooter.png
+│   │       │   │   ├── bgtop.png
+│   │       │   │   ├── comment-bright.png
+│   │       │   │   ├── comment-close.png
+│   │       │   │   ├── comment.png
+│   │       │   │   ├── doctools.js
+│   │       │   │   ├── down.png
+│   │       │   │   ├── down-pressed.png
+│   │       │   │   ├── file.png
+│   │       │   │   ├── jquery.js
+│   │       │   │   ├── minus.png
+│   │       │   │   ├── plus.png
+│   │       │   │   ├── pygments.css
+│   │       │   │   ├── qualimap_logo_small.png
+│   │       │   │   ├── report.css
+│   │       │   │   ├── searchtools.js
+│   │       │   │   ├── underscore.js
+│   │       │   │   ├── up.png
+│   │       │   │   ├── up-pressed.png
+│   │       │   │   └── websupport.js
+│   │       │   ├── genome_results.txt
+│   │       │   ├── images_qualimapReport
+│   │       │   │   ├── genome_coverage_0to50_histogram.png
+│   │       │   │   ├── genome_coverage_across_reference.png
+│   │       │   │   ├── genome_coverage_histogram.png
+│   │       │   │   ├── genome_coverage_quotes.png
+│   │       │   │   ├── genome_gc_content_per_window.png
+│   │       │   │   ├── genome_homopolymer_indels.png
+│   │       │   │   ├── genome_insert_size_across_reference.png
+│   │       │   │   ├── genome_insert_size_histogram.png
+│   │       │   │   ├── genome_mapping_quality_across_reference.png
+│   │       │   │   ├── genome_mapping_quality_histogram.png
+│   │       │   │   ├── genome_reads_clipping_profile.png
+│   │       │   │   ├── genome_reads_content_per_read_position.png
+│   │       │   │   └── genome_uniq_read_starts_histogram.png
+│   │       │   ├── qualimapReport.html
+│   │       │   └── raw_data_qualimapReport
+│   │       │       ├── coverage_across_reference.txt
+│   │       │       ├── coverage_histogram.txt
+│   │       │       ├── duplication_rate_histogram.txt
+│   │       │       ├── genome_fraction_coverage.txt
+│   │       │       ├── homopolymer_indels.txt
+│   │       │       ├── insert_size_across_reference.txt
+│   │       │       ├── insert_size_histogram.txt
+│   │       │       ├── mapped_reads_clipping_profile.txt
+│   │       │       ├── mapped_reads_gc-content_distribution.txt
+│   │       │       ├── mapped_reads_nucleotide_content.txt
+│   │       │       ├── mapping_quality_across_reference.txt
+│   │       │       └── mapping_quality_histogram.txt
+│   │       └── bwa~genome~D3
+│   │           ├── css
+│   │           │   ├── agogo.css
+│   │           │   ├── ajax-loader.gif
+│   │           │   ├── basic.css
+│   │           │   ├── bgfooter.png
+│   │           │   ├── bgtop.png
+│   │           │   ├── comment-bright.png
+│   │           │   ├── comment-close.png
+│   │           │   ├── comment.png
+│   │           │   ├── doctools.js
+│   │           │   ├── down.png
+│   │           │   ├── down-pressed.png
+│   │           │   ├── file.png
+│   │           │   ├── jquery.js
+│   │           │   ├── minus.png
+│   │           │   ├── plus.png
+│   │           │   ├── pygments.css
+│   │           │   ├── qualimap_logo_small.png
+│   │           │   ├── report.css
+│   │           │   ├── searchtools.js
+│   │           │   ├── underscore.js
+│   │           │   ├── up.png
+│   │           │   ├── up-pressed.png
+│   │           │   └── websupport.js
+│   │           ├── genome_results.txt
+│   │           ├── images_qualimapReport
+│   │           │   ├── genome_coverage_0to50_histogram.png
+│   │           │   ├── genome_coverage_across_reference.png
+│   │           │   ├── genome_coverage_histogram.png
+│   │           │   ├── genome_coverage_quotes.png
+│   │           │   ├── genome_gc_content_per_window.png
+│   │           │   ├── genome_homopolymer_indels.png
+│   │           │   ├── genome_insert_size_across_reference.png
+│   │           │   ├── genome_insert_size_histogram.png
+│   │           │   ├── genome_mapping_quality_across_reference.png
+│   │           │   ├── genome_mapping_quality_histogram.png
+│   │           │   ├── genome_reads_clipping_profile.png
+│   │           │   ├── genome_reads_content_per_read_position.png
+│   │           │   └── genome_uniq_read_starts_histogram.png
+│   │           ├── qualimapReport.html
+│   │           └── raw_data_qualimapReport
+│   │               ├── coverage_across_reference.txt
+│   │               ├── coverage_histogram.txt
+│   │               ├── duplication_rate_histogram.txt
+│   │               ├── genome_fraction_coverage.txt
+│   │               ├── homopolymer_indels.txt
+│   │               ├── insert_size_across_reference.txt
+│   │               ├── insert_size_histogram.txt
+│   │               ├── mapped_reads_clipping_profile.txt
+│   │               ├── mapped_reads_gc-content_distribution.txt
+│   │               ├── mapped_reads_nucleotide_content.txt
+│   │               ├── mapping_quality_across_reference.txt
+│   │               └── mapping_quality_histogram.txt
+│   ├── samples
+│   │   └── bwa
+│   │       └── genome
+│   │           ├── con.bam
+│   │           ├── D2.bam
+│   │           └── D3.bam
+│   └── sets
+│       ├── bwa~genome~all_samples.bam
+│       └── bwa~genome~all_samples.bam.bai
+├── alnstats
+│   ├── everything_COV.csv
+│   ├── everything_GCC.csv
+│   ├── everything_GCF.csv
+│   ├── everything_GCL.csv
+│   ├── everything_ID.csv
+│   ├── everything_IS.csv
+│   ├── everything_RL.csv
+│   └── everything_SN.csv
+├── log
+│   ├── abra
+│   │   ├── bwa~genome~all_samples.benchmark
+│   │   └── bwa~genome~all_samples.log
+│   ├── adapterremoval
+│   │   ├── run_1
+│   │   │   ├── con.log
+│   │   │   ├── D2.log
+│   │   │   └── D3.log
+│   │   └── run_2
+│   │       └── con.log
+│   ├── bamindex
+│   │   └── data
+│   │       └── abra
+│   ├── bamstats
+│   │   └── mergeallbamstats.log
+│   ├── bamstats_sample
+│   │   ├── bwa~genome~con.tsv
+│   │   ├── bwa~genome~D2.tsv
+│   │   └── bwa~genome~D3.tsv
+│   ├── bcf2vcf
+│   │   └── data
+│   │       └── variants
+│   │           └── final
+│   │               ├── freebayes~bwa~genome~all_samples~filtered-default.log
+│   │               └── freebayes~bwa~genome~all_samples~filtered-strict.log
+│   ├── bcffilter
+│   │   └── freebayes~bwa~genome~all_samples
+│   │       ├── default
+│   │       │   ├── Chr02_region1M_2M:000000001-001000000.log
+│   │       │   └── Chr04_region1M_2M:000000001-001000000.log
+│   │       └── strict
+│   │           ├── Chr02_region1M_2M:000000001-001000000.log
+│   │           └── Chr04_region1M_2M:000000001-001000000.log
+│   ├── bwa
+│   │   └── genome
+│   │       ├── run_1
+│   │       │   ├── con.log
+│   │       │   ├── D2.log
+│   │       │   └── D3.log
+│   │       └── run_2
+│   │           └── con.log
+│   ├── freebayes
+│   │   └── bwa~genome~all_samples
+│   │       ├── Chr02_region1M_2M:000000001-001000000.benchmark
+│   │       ├── Chr02_region1M_2M:000000001-001000000.log
+│   │       ├── Chr04_region1M_2M:000000001-001000000.benchmark
+│   │       └── Chr04_region1M_2M:000000001-001000000.log
+│   ├── markdup
+│   │   └── bwa
+│   │       └── genome
+│   │           ├── run_1
+│   │           │   ├── con.log
+│   │           │   ├── D2.log
+│   │           │   └── D3.log
+│   │           └── run_2
+│   │               └── con.log
+│   ├── mash
+│   │   ├── dist
+│   │   │   └── k21-s1e5-all_samples.log
+│   │   └── sketch
+│   │       └── k21-s1e5-all_samples.log
+│   ├── mergebcf
+│   │   ├── freebayes~bwa~genome~all_samples_filtered~default.log
+│   │   └── freebayes~bwa~genome~all_samples_filtered~strict.log
+│   ├── mergesamplebam
+│   │   └── bwa
+│   │       └── genome
+│   │           ├── con.log
+│   │           ├── D2.log
+│   │           └── D3.log
+│   ├── mergesetbam
+│   │   └── bwa
+│   │       └── genome
+│   │           └── all_samples.log
+│   ├── qualimap_sample
+│   │   ├── bwa~genome~con.log
+│   │   ├── bwa~genome~D2.log
+│   │   └── bwa~genome~D3.log
+│   ├── readstats
+│   │   └── seqhax-stats-librun.log
+│   └── samplefastq
+├── mash
+│   └── k21-s1e5
+│       └── all_samples.dist
+├── plots
+│   └── quals.svg
+├── readme
+├── reads
+│   ├── runs
+│   │   ├── run_1
+│   │   │   ├── con.fastq.gz
+│   │   │   ├── D2.fastq.gz
+│   │   │   └── D3.fastq.gz
+│   │   └── run_2
+│   │       └── con.fastq.gz
+│   └── samples
+│       ├── con.fastq.gz
+│       ├── D2.fastq.gz
+│       └── D3.fastq.gz
+├── samplelists
+│   ├── all_samples.txt
+│   ├── GENERATED_FILES_DO_NOT_EDIT
+│   ├── mutants.txt
+│   └── wild_type.txt
+├── stats
+│   ├── adapterremoval
+│   │   ├── run_1
+│   │   │   ├── con.txt
+│   │   │   ├── D2.txt
+│   │   │   └── D3.txt
+│   │   └── run_2
+│   │       └── con.txt
+│   └── reads
+│       └── readnum_librun.tsv
+└── variants
+    ├── filter_split
+    │   ├── freebayes~bwa~genome~all_samples_filtered~default
+    │   │   ├── Chr02_region1M_2M:000000001-001000000.bcf
+    │   │   └── Chr04_region1M_2M:000000001-001000000.bcf
+    │   └── freebayes~bwa~genome~all_samples_filtered~strict
+    │       ├── Chr02_region1M_2M:000000001-001000000.bcf
+    │       └── Chr04_region1M_2M:000000001-001000000.bcf
+    ├── final
+    │   ├── freebayes~bwa~genome~all_samples~filtered-default.bcf
+    │   ├── freebayes~bwa~genome~all_samples~filtered-default.bcf.csi
+    │   ├── freebayes~bwa~genome~all_samples~filtered-default.vcf.gz
+    │   ├── freebayes~bwa~genome~all_samples~filtered-default.vcf.gz.csi
+    │   ├── freebayes~bwa~genome~all_samples~filtered-strict.bcf
+    │   ├── freebayes~bwa~genome~all_samples~filtered-strict.bcf.csi
+    │   ├── freebayes~bwa~genome~all_samples~filtered-strict.vcf.gz
+    │   └── freebayes~bwa~genome~all_samples~filtered-strict.vcf.gz.csi
+    └── raw_split
+        └── freebayes~bwa~genome~all_samples
+            ├── Chr02_region1M_2M:000000001-001000000.bcf
+            └── Chr04_region1M_2M:000000001-001000000.bcf
+
+97 directories, 242 files

@@ -13,5 +13,3 @@ def pconfig (myconfig):
     except AttributeError:
         print ('Invalid config. NOT dictionary')
 
-if __name__ == '__main__':
-    pass

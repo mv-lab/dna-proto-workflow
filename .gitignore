@@ -1,26 +1,25 @@
 # Ignore .snakemake
 .snakemake/
+*/.snakemake.*
 
 # Ignore notes, txt etc
 command
 
-# Ignore mock data (backup)
+# Ignore mockdata (backup) and others...
 mockdata/
 oldtoy/
 backup
+toydata/
 
 # PyCache
-.*__pycache__
-utils/__pycache__/
+*/__pycache__
 
 # generated data files
-data/
+data/*
+!data/readme
 
 # rawdata (size problem)
-
 #rawdata/reference/*
-rawdata/snpeffdata/genomes/*
+#rawdata/snpeffdata/genomes/*
 rawdata/snpeffdata/*
 
-dag.svg
-toydata/

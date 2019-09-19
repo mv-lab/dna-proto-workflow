@@ -28,7 +28,7 @@ rule readqc:
     input:
         rules.qc_runlib.input,
         rules.read_stats.input,
-        #rules.qc_samples.input,
+        rules.qc_samples.input,
 
 
 ##### Actual rules #####
@@ -69,6 +69,7 @@ rule qcreads:
         "   -b >(pigz -p 5 >{output.reads})"
         "   /dev/stdin"
         ") >{log.log} 2>&1"
+
 
 #localrules: qcreads
 rule qcreads_il:
@@ -133,6 +134,7 @@ rule read_count_librun:
         "    {input}"
         "    >{output}"
         " ) 2>{log}"
+
 
 rule read_count_sample:
     input:
