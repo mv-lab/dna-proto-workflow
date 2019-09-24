@@ -13,7 +13,7 @@ rule stats:
 
 rule plot_quals:
     input:
-        "data/variants/final/freebayes~bwa~genome~all_samples~filtered-strict.vcf.gz"
+        "data/variants/final/freebayes~bwa~Sorghum~all_samples~filtered-strict.vcf.gz"
     output:
         "data/plots/quals.svg"
     script:

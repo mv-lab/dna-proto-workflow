@@ -10,22 +10,26 @@ qc:
 
 sample_sets: []
 
+init:
+  refs:
+    - Sorghum
+
+refs:
+  Sorghum: genomes_and_annotations/genomes/Sorghum/genome.fa
+
 mapping:
   aligners:
     - bwa
   refs:
-    - genome
+    - Sorghum
   samplesets:
     - all_samples
   ngm:
     sensitivity: 0.5
 
-refs:
-  genome: /home/marcos/Desktop/dna-proto-workflow/rawdata/reference/genome.fa
-
 snpeff:
   name: Sorghum_bicolor_NCBIv3.42
-  genome: /home/marcos/Desktop/dna-proto-workflow/rawdata/reference/genome.fa
+  Sorghum: genomes_and_annotations/snpeffdata/genomes/Sorghum_bicolor_NCBIv3.42.fa.gz
 
 
 denovodist:
@@ -51,7 +55,7 @@ varcall:
     #- mpileup
     - freebayes
   refs:
-    - genome
+    - Sorghum
   samplesets:
     - all_samples
   filters:

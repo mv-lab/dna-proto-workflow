@@ -54,15 +54,6 @@ rule align:
 
 ##### Actual rules #####
 
-rule align_prepare_reference:
-    input:
-        "rawdata/reference/genome.fa"
-    output:
-        expand("rawdata/reference/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"])
-    shell:
-        "bwa index {input}"
-
-
 rule ngmap:
     input:
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
@@ -90,7 +81,7 @@ rule ngmap:
 
 rule bwamem:
     input:
-        expand("rawdata/reference/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"]),
+        expand("genomes_and_annotations/genomes/Sorghum/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"]),
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
         ref=lambda wc: config['refs'][wc.ref],
     output:

@@ -11,13 +11,13 @@ def create_contigs_file():
     # Prepare contigs of interest (bed)
     is_contigs = os.path.exists('metadata/contigs_of_interest.bed')
     if not is_contigs:
-        os.system(r'awk -f utils/contigs.bed.awk rawdata/reference/genome.fa.fai > metadata/contigs_of_interest.bed')
+        os.system(r'awk -f utils/contigs.bed.awk genomes_and_annotations/genomes/Sorghum/genome.fa.fai > metadata/contigs_of_interest.bed')
 
 
 def create_fai():
     is_fai = os.path.exists('rawdata/reference/genome.fa.fai')
     if not is_fai:
-        os.system('samtools faidx rawdata/reference/genome.fa ')
+        os.system('samtools faidx genomes_and_annotations/genomes/Sorghum/genome.fa ')
 
 
 def parsefai(fai):

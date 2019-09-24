@@ -10,6 +10,7 @@ mockdata/
 oldtoy/
 backup
 toydata/
+igv/
 
 # PyCache
 */__pycache__
@@ -22,4 +23,5 @@ data/*
 #rawdata/reference/*
 #rawdata/snpeffdata/genomes/*
 rawdata/snpeffdata/*
+genomes_and_annotations/
 

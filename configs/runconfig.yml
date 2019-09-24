@@ -1,10 +1,12 @@
 
 abra2:
   memory:
-    - Xmx4g
+    - Xmx6g
   release:
     - envs/abra2.jar
   temp:
     - /tmp
+  threads:
+    - 7
   regions:
     - metadata/contigs_of_interest.bed

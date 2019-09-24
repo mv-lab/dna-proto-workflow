@@ -1,28 +1,28 @@
 data/
 ├── abra
-│   ├── bwa~genome~all_samples.bam
-│   └── bwa~genome~all_samples.bam.bai
+│   ├── bwa~Sorghum~all_samples.bam
+│   └── bwa~Sorghum~all_samples.bam.bai
 ├── alignments
 │   ├── bamlists
-│   │   └── bwa~genome~all_samples.bamlist
+│   │   └── bwa~Sorghum~all_samples.bamlist
 │   ├── bamstats
 │   │   └── sample
-│   │       ├── bwa~genome~con.tsv
-│   │       ├── bwa~genome~D2.tsv
-│   │       └── bwa~genome~D3.tsv
+│   │       ├── bwa~Sorghum~con.tsv
+│   │       ├── bwa~Sorghum~D2.tsv
+│   │       └── bwa~Sorghum~D3.tsv
 │   ├── byrun
 │   │   └── bwa
-│   │       └── genome
+│   │       └── Sorghum
 │   │           ├── run_1
 │   │           └── run_2
 │   ├── byrun.raw
 │   │   └── bwa
-│   │       └── genome
+│   │       └── Sorghum
 │   │           ├── run_1
 │   │           └── run_2
 │   ├── qualimap
 │   │   └── samples
-│   │       ├── bwa~genome~con
+│   │       ├── bwa~Sorghum~con
 │   │       │   ├── css
 │   │       │   │   ├── agogo.css
 │   │       │   │   ├── ajax-loader.gif
@@ -76,7 +76,7 @@ data/
 │   │       │       ├── mapped_reads_nucleotide_content.txt
 │   │       │       ├── mapping_quality_across_reference.txt
 │   │       │       └── mapping_quality_histogram.txt
-│   │       ├── bwa~genome~D2
+│   │       ├── bwa~Sorghum~D2
 │   │       │   ├── css
 │   │       │   │   ├── agogo.css
 │   │       │   │   ├── ajax-loader.gif
@@ -130,7 +130,7 @@ data/
 │   │       │       ├── mapped_reads_nucleotide_content.txt
 │   │       │       ├── mapping_quality_across_reference.txt
 │   │       │       └── mapping_quality_histogram.txt
-│   │       └── bwa~genome~D3
+│   │       └── bwa~Sorghum~D3
 │   │           ├── css
 │   │           │   ├── agogo.css
 │   │           │   ├── ajax-loader.gif
@@ -186,13 +186,13 @@ data/
 │   │               └── mapping_quality_histogram.txt
 │   ├── samples
 │   │   └── bwa
-│   │       └── genome
+│   │       └── Sorghum
 │   │           ├── con.bam
 │   │           ├── D2.bam
 │   │           └── D3.bam
 │   └── sets
-│       ├── bwa~genome~all_samples.bam
-│       └── bwa~genome~all_samples.bam.bai
+│       ├── bwa~Sorghum~all_samples.bam
+│       └── bwa~Sorghum~all_samples.bam.bai
 ├── alnstats
 │   ├── everything_COV.csv
 │   ├── everything_GCC.csv
@@ -202,10 +202,14 @@ data/
 │   ├── everything_IS.csv
 │   ├── everything_RL.csv
 │   └── everything_SN.csv
+├── denovo
+│   └── mash
+│       └── k21-s1e5
+│           └── all_samples.dist
 ├── log
 │   ├── abra
-│   │   ├── bwa~genome~all_samples.benchmark
-│   │   └── bwa~genome~all_samples.log
+│   │   ├── bwa~Sorghum~all_samples.benchmark
+│   │   └── bwa~Sorghum~all_samples.log
 │   ├── adapterremoval
 │   │   ├── run_1
 │   │   │   ├── con.log
@@ -219,17 +223,17 @@ data/
 │   ├── bamstats
 │   │   └── mergeallbamstats.log
 │   ├── bamstats_sample
-│   │   ├── bwa~genome~con.tsv
-│   │   ├── bwa~genome~D2.tsv
-│   │   └── bwa~genome~D3.tsv
+│   │   ├── bwa~Sorghum~con.tsv
+│   │   ├── bwa~Sorghum~D2.tsv
+│   │   └── bwa~Sorghum~D3.tsv
 │   ├── bcf2vcf
 │   │   └── data
 │   │       └── variants
 │   │           └── final
-│   │               ├── freebayes~bwa~genome~all_samples~filtered-default.log
-│   │               └── freebayes~bwa~genome~all_samples~filtered-strict.log
+│   │               ├── freebayes~bwa~Sorghum~all_samples~filtered-default.log
+│   │               └── freebayes~bwa~Sorghum~all_samples~filtered-strict.log
 │   ├── bcffilter
-│   │   └── freebayes~bwa~genome~all_samples
+│   │   └── freebayes~bwa~Sorghum~all_samples
 │   │       ├── default
 │   │       │   ├── Chr02_region1M_2M:000000001-001000000.log
 │   │       │   └── Chr04_region1M_2M:000000001-001000000.log
@@ -237,7 +241,7 @@ data/
 │   │           ├── Chr02_region1M_2M:000000001-001000000.log
 │   │           └── Chr04_region1M_2M:000000001-001000000.log
 │   ├── bwa
-│   │   └── genome
+│   │   └── Sorghum
 │   │       ├── run_1
 │   │       │   ├── con.log
 │   │       │   ├── D2.log
@@ -245,14 +249,14 @@ data/
 │   │       └── run_2
 │   │           └── con.log
 │   ├── freebayes
-│   │   └── bwa~genome~all_samples
+│   │   └── bwa~Sorghum~all_samples
 │   │       ├── Chr02_region1M_2M:000000001-001000000.benchmark
 │   │       ├── Chr02_region1M_2M:000000001-001000000.log
 │   │       ├── Chr04_region1M_2M:000000001-001000000.benchmark
 │   │       └── Chr04_region1M_2M:000000001-001000000.log
 │   ├── markdup
 │   │   └── bwa
-│   │       └── genome
+│   │       └── Sorghum
 │   │           ├── run_1
 │   │           │   ├── con.log
 │   │           │   ├── D2.log
@@ -265,28 +269,25 @@ data/
 │   │   └── sketch
 │   │       └── k21-s1e5-all_samples.log
 │   ├── mergebcf
-│   │   ├── freebayes~bwa~genome~all_samples_filtered~default.log
-│   │   └── freebayes~bwa~genome~all_samples_filtered~strict.log
+│   │   ├── freebayes~bwa~Sorghum~all_samples_filtered~default.log
+│   │   └── freebayes~bwa~Sorghum~all_samples_filtered~strict.log
 │   ├── mergesamplebam
 │   │   └── bwa
-│   │       └── genome
+│   │       └── Sorghum
 │   │           ├── con.log
 │   │           ├── D2.log
 │   │           └── D3.log
 │   ├── mergesetbam
 │   │   └── bwa
-│   │       └── genome
+│   │       └── Sorghum
 │   │           └── all_samples.log
 │   ├── qualimap_sample
-│   │   ├── bwa~genome~con.log
-│   │   ├── bwa~genome~D2.log
-│   │   └── bwa~genome~D3.log
+│   │   ├── bwa~Sorghum~con.log
+│   │   ├── bwa~Sorghum~D2.log
+│   │   └── bwa~Sorghum~D3.log
 │   ├── readstats
 │   │   └── seqhax-stats-librun.log
 │   └── samplefastq
-├── mash
-│   └── k21-s1e5
-│       └── all_samples.dist
 ├── plots
 │   └── quals.svg
 ├── readme
@@ -319,24 +320,24 @@ data/
 │       └── readnum_librun.tsv
 └── variants
     ├── filter_split
-    │   ├── freebayes~bwa~genome~all_samples_filtered~default
+    │   ├── freebayes~bwa~Sorghum~all_samples_filtered~default
     │   │   ├── Chr02_region1M_2M:000000001-001000000.bcf
     │   │   └── Chr04_region1M_2M:000000001-001000000.bcf
-    │   └── freebayes~bwa~genome~all_samples_filtered~strict
+    │   └── freebayes~bwa~Sorghum~all_samples_filtered~strict
     │       ├── Chr02_region1M_2M:000000001-001000000.bcf
     │       └── Chr04_region1M_2M:000000001-001000000.bcf
     ├── final
-    │   ├── freebayes~bwa~genome~all_samples~filtered-default.bcf
-    │   ├── freebayes~bwa~genome~all_samples~filtered-default.bcf.csi
-    │   ├── freebayes~bwa~genome~all_samples~filtered-default.vcf.gz
-    │   ├── freebayes~bwa~genome~all_samples~filtered-default.vcf.gz.csi
-    │   ├── freebayes~bwa~genome~all_samples~filtered-strict.bcf
-    │   ├── freebayes~bwa~genome~all_samples~filtered-strict.bcf.csi
-    │   ├── freebayes~bwa~genome~all_samples~filtered-strict.vcf.gz
-    │   └── freebayes~bwa~genome~all_samples~filtered-strict.vcf.gz.csi
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-default.bcf
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-default.bcf.csi
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-default.vcf.gz
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-default.vcf.gz.csi
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-strict.bcf
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-strict.bcf.csi
+    │   ├── freebayes~bwa~Sorghum~all_samples~filtered-strict.vcf.gz
+    │   └── freebayes~bwa~Sorghum~all_samples~filtered-strict.vcf.gz.csi
     └── raw_split
-        └── freebayes~bwa~genome~all_samples
+        └── freebayes~bwa~Sorghum~all_samples
             ├── Chr02_region1M_2M:000000001-001000000.bcf
             └── Chr04_region1M_2M:000000001-001000000.bcf
 
-97 directories, 242 files
+98 directories, 242 files

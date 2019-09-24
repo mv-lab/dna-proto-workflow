@@ -7,21 +7,21 @@
 
 rule kwip:
     input:
-        expand("data/kwip/k{ksize}-s{sketchsize}/{set}.dist",
+        expand("data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
                ksize=config["denovodist"]["ksize"],
                sketchsize=config["denovodist"]["kwip_sketchsize"],
                set=config["denovodist"]["kwip_sets"]),
 
 rule sourmash:
     input:
-        expand("data/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
+        expand("data/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
                ksize=config["denovodist"]["ksize"],
                sketchsize=config["denovodist"]["sourmash_sketchsize"],
                set=config["denovodist"]["sourmash_sets"]),
 
 rule mash:
     input:
-        expand("data/mash/k{ksize}-s{sketchsize}/{set}.dist",
+        expand("data/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
                ksize=config["denovodist"]["ksize"],
                sketchsize=config["denovodist"]["mash_sketchsize"],
                set=config["denovodist"]["mash_sets"]),
@@ -40,7 +40,7 @@ rule mashsketch:
         lambda wc: expand("data/reads/samples/{sample}.fastq.gz",
                           sample=SAMPLESETS[wc.set]),
     output:
-        temp("data/mash/k{ksize}-s{sketchsize}/{set}.msh"),
+        temp("data/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"),
     log:
         "data/log/mash/sketch/k{ksize}-s{sketchsize}-{set}.log"
     threads: 27
@@ -56,9 +56,9 @@ rule mashsketch:
 
 rule mashdist:
     input:
-        "data/mash/k{ksize}-s{sketchsize}/{set}.msh"
+        "data/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"
     output:
-        dist="data/mash/k{ksize}-s{sketchsize}/{set}.dist",
+        dist="data/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
     log:
         "data/log/mash/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads: 27
@@ -74,9 +74,9 @@ rule countsketch:
     input:
         "data/reads/samples/{sample}.fastq.gz",
     output:
-        ct=temp("data/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz"),
-        info="data/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info",
-        tsv="data/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info.tsv",
+        ct=temp("data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz"),
+        info="data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info",
+        tsv="data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info.tsv",
     log:
         "data/log/kwip/sketch/k{ksize}-s{sketchsize}-{sample}.log"
     threads:
@@ -96,12 +96,12 @@ rule countsketch:
 
 rule kwipdist:
     input:
-        lambda wc: expand("data/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz",
+        lambda wc: expand("data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz",
                             ksize=wc.ksize, sketchsize=wc.sketchsize,
                             sample=SAMPLESETS[wc.set]),
     output:
-        d="data/kwip/k{ksize}-s{sketchsize}/{set}.dist",
-        k="data/kwip/k{ksize}-s{sketchsize}/{set}.kern",
+        d="data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
+        k="data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.kern",
     log:
         "data/log/kwip/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads:
@@ -139,7 +139,7 @@ rule sourmash_sketch:
     input:
         "data/reads/samples/{sample}.fastq.gz",
     output:
-        temp("data/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh"),
+        temp("data/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh"),
     log:
         "data/log/sourmash/sketch/k{ksize}-s{sketchsize}-{sample}.log"
     shell:
@@ -153,11 +153,11 @@ rule sourmash_sketch:
 
 rule sourmash_dist:
     input:
-        lambda wc: expand("data/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh",
+        lambda wc: expand("data/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh",
                             ksize=wc.ksize, sketchsize=wc.sketchsize,
                             sample=SAMPLESETS[wc.set]),
     output:
-        "data/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
+        "data/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
     log:
         "data/log/sourmash/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads: 1
