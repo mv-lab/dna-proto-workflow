@@ -23,5 +23,4 @@ data/*
 #rawdata/reference/*
 #rawdata/snpeffdata/genomes/*
 rawdata/snpeffdata/*
-genomes_and_annotations/
-
+genomes_and_annotations/snpeffdata/

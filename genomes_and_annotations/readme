@@ -1,0 +1,31 @@
+genomes_and_annotations/
+├── genomes
+│   └── Sorghum
+│       ├── genome.fa
+│       ├── genome.fa.amb
+│       ├── genome.fa.ann
+│       ├── genome.fa.bwt
+│       ├── genome.fa.fai
+│       ├── genome.fa.pac
+│       └── genome.fa.sa
+├── readme
+└── snpeffdata
+    ├── genomes
+    │   └── Sorghum_bicolor_NCBIv3.42.fa.gz
+    ├── Readme
+    └── Sorghum_bicolor_NCBIv3.42
+        ├── genes.gtf.gz
+        ├── sequence.10.bin
+        ├── sequence.1.bin
+        ├── sequence.2.bin
+        ├── sequence.3.bin
+        ├── sequence.4.bin
+        ├── sequence.5.bin
+        ├── sequence.6.bin
+        ├── sequence.7.bin
+        ├── sequence.8.bin
+        ├── sequence.9.bin
+        ├── sequence.bin
+        └── snpEffectPredictor.bin
+
+5 directories, 23 files
