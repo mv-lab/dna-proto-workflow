@@ -26,11 +26,21 @@ rule mash:
                sketchsize=config["denovodist"]["mash_sketchsize"],
                set=config["denovodist"]["mash_sets"]),
 
+rule pca:
+    input:
+        rules.mash.input,
+    output:
+        "plots/denovo/mash/pca.pdf"
+    script:
+        "../scripts/pca.R"
+
+
 rule denovo:
     input:
         rules.kwip.input,
         rules.mash.input,
         rules.sourmash.input,
+        rules.pca.output,
 
 
 ##### Actual rules #####
@@ -42,7 +52,7 @@ rule mashsketch:
     output:
         temp("data/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"),
     log:
-        "data/log/mash/sketch/k{ksize}-s{sketchsize}-{set}.log"
+        "log/denovo/mash/sketch/k{ksize}-s{sketchsize}-{set}.log"
     threads: 27
     shell:
         " mash sketch"
@@ -60,7 +70,7 @@ rule mashdist:
     output:
         dist="data/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
     log:
-        "data/log/mash/dist/k{ksize}-s{sketchsize}-{set}.log"
+        "log/denovo/mash/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads: 27
     shell:
         "mash dist"
@@ -78,7 +88,7 @@ rule countsketch:
         info="data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info",
         tsv="data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info.tsv",
     log:
-        "data/log/kwip/sketch/k{ksize}-s{sketchsize}-{sample}.log"
+        "log/denovo/kwip/sketch/k{ksize}-s{sketchsize}-{sample}.log"
     threads:
         3
     shell:
@@ -103,7 +113,7 @@ rule kwipdist:
         d="data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
         k="data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.kern",
     log:
-        "data/log/kwip/dist/k{ksize}-s{sketchsize}-{set}.log"
+        "log/denovo/kwip/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads:
         4
     shell:
@@ -125,7 +135,7 @@ rule unique_kmers:
     params:
         kmersize=config["denovodist"]["ksize"],
     log:
-        "data/log/readstats/unique-kmers/{set}.log",
+        "log/denovo/readstats/unique-kmers/{set}.log",
     shell:
         "( kdm-unique-kmers.py"
         "    -t {threads}"
@@ -141,7 +151,7 @@ rule sourmash_sketch:
     output:
         temp("data/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh"),
     log:
-        "data/log/sourmash/sketch/k{ksize}-s{sketchsize}-{sample}.log"
+        "log/denovo/sourmash/sketch/k{ksize}-s{sketchsize}-{sample}.log"
     shell:
         "( sourmash compute"
         "   --name '{wildcards.sample}'"
@@ -159,7 +169,7 @@ rule sourmash_dist:
     output:
         "data/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
     log:
-        "data/log/sourmash/dist/k{ksize}-s{sketchsize}-{set}.log"
+        "log/denovo/sourmash/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads: 1
     shell:
         "(sourmash compare -k {wildcards.ksize} -o {output} {input} ) >{log} 2>&1"

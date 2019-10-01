@@ -41,7 +41,7 @@ rule qcreads:
     output:
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
     log:
-        log="data/log/adapterremoval/{run}/{lib}.log",
+        log="log/adapterremoval/{run}/{lib}.log",
         settings="data/stats/adapterremoval/{run}/{lib}.txt",
     threads:
         7
@@ -78,7 +78,7 @@ rule qcreads_il:
     output:
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
     log:
-        log="data/log/adapterremoval/{run}/{lib}.log",
+        log="log/adapterremoval/{run}/{lib}.log",
         settings="data/stats/adapterremoval/{run}/{lib}.txt",
     threads:
         7
@@ -113,7 +113,7 @@ rule samplefastq:
     input:
         lambda wc: ["data/reads/runs/{run}/{lib}.fastq.gz".format(run=r, lib=l) for r, l in SAMP2RUNLIB[wc.sample]],
     output: "data/reads/samples/{sample}.fastq.gz"
-    log: "data/log/samplefastq/{sample}.log"
+    log: "log/samplefastq/{sample}.log"
     threads: 1
     shell:
         "cat {input} > {output}"
@@ -127,7 +127,7 @@ rule read_count_librun:
     threads:
         28
     log:
-        "data/log/readstats/seqhax-stats-librun.log",
+        "log/readstats/seqhax-stats-librun.log",
     shell:
         "( seqhax stats"
         "    -t {threads}"
@@ -144,7 +144,7 @@ rule read_count_sample:
     threads:
         27
     log:
-        "data/log/readstats/seqhax-stats-sample.log",
+        "log/readstats/seqhax-stats-sample.log",
     shell:
         "( seqhax stats"
         "    -t {threads}"

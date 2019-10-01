@@ -38,7 +38,6 @@ rule prepare_ref:
     shell:
         "samtools faidx {input} 2> {log}"
 
-
 rule contigs:
     input:
         "genomes_and_annotations/genomes/{ref}/genome.fa.fai",

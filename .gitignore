@@ -5,19 +5,14 @@
 # Ignore notes, txt etc
 command
 
-# Ignore mockdata (backup) and others...
-mockdata/
-oldtoy/
-backup
-toydata/
-igv/
-
 # PyCache
 */__pycache__
 
 # generated data files
 data/*
 !data/readme
+log/
+plots/
 
 # rawdata (size problem)
 #rawdata/reference/*

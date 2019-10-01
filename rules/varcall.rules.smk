@@ -46,9 +46,9 @@ rule abra2:
     output:
         "data/abra/{aligner}~{ref}~{sampleset}.bam",
     log:
-        "data/log/abra/{aligner}~{ref}~{sampleset}.log"
+        "log/varcall/abra/{aligner}~{ref}~{sampleset}.log"
     benchmark:
-        "data/log/abra/{aligner}~{ref}~{sampleset}.benchmark"
+        "log/varcall/abra/{aligner}~{ref}~{sampleset}.benchmark"
     params:
         region = config['abra2']['regions'],
         ref = lambda wc: config['refs'][wc.ref],
@@ -80,9 +80,9 @@ rule freebayes:
     output:
         bcf="data/variants/raw_split/freebayes~{aligner}~{ref}~{sampleset}/{region}.bcf",
     log:
-        "data/log/freebayes/{aligner}~{ref}~{sampleset}/{region}.log"
+        "log/varcall/freebayes/{aligner}~{ref}~{sampleset}/{region}.log"
     benchmark:
-        "data/log/freebayes/{aligner}~{ref}~{sampleset}/{region}.benchmark"
+        "log/varcall/freebayes/{aligner}~{ref}~{sampleset}/{region}.benchmark"
     priority: 1  # get them done earlier, normalisation is super quick
     params:
         theta=config["varcall"].get("theta_prior", 0.01),
@@ -121,9 +121,9 @@ rule mpileup:
     output:
         bcf="data/variants/raw_split/mpileup~{aligner}~{ref}~{sampleset}/{region}.bcf",
     log:
-        "data/log/mpileup/{aligner}~{ref}~{sampleset}/{region}.log"
+        "log/varcall/mpileup/{aligner}~{ref}~{sampleset}/{region}.log"
     benchmark:
-        "data/log/mpileup/{aligner}~{ref}~{sampleset}/{region}.benchmark"
+        "log/varcall/mpileup/{aligner}~{ref}~{sampleset}/{region}.benchmark"
     params:
         theta=config["varcall"].get("theta_prior", 0.01),
         minmq=lambda wc: config["varcall"]["minmapq"].get(wc.aligner, 5),
@@ -159,7 +159,7 @@ rule bcffilter:
         # Not a pipe! can't run all regions separately if this is a pipe into merge
         bcf="data/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
     log:
-        "data/log/bcffilter/{caller}~{aligner}~{ref}~{sampleset}/{filter}/{region}.log"
+        "log/varcall/bcffilter/{caller}~{aligner}~{ref}~{sampleset}/{filter}/{region}.log"
     params:
         filtarg=lambda wc: config["varcall"]["filters"][wc.filter].replace('\n', ' ')
     shell:
@@ -192,7 +192,7 @@ rule bcfmerge:
     output:
         bcf="data/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf",
     log:
-        "data/log/mergebcf/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}.log"
+        "log/varcall/mergebcf/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}.log"
     threads: 4
     shell:
         "( bcftools concat"
@@ -209,7 +209,7 @@ rule bcf2vcf:
     output:
         vcf="{path}.vcf.gz",
     log:
-        "data/log/bcf2vcf/{path}.log"
+        "log/varcall/bcf2vcf/{path}.log"
     threads: 4
     shell:
         "( bcftools view"

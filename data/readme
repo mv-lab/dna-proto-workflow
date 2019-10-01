@@ -206,88 +206,6 @@ data/
 │   └── mash
 │       └── k21-s1e5
 │           └── all_samples.dist
-├── log
-│   ├── abra
-│   │   ├── bwa~Sorghum~all_samples.benchmark
-│   │   └── bwa~Sorghum~all_samples.log
-│   ├── adapterremoval
-│   │   ├── run_1
-│   │   │   ├── con.log
-│   │   │   ├── D2.log
-│   │   │   └── D3.log
-│   │   └── run_2
-│   │       └── con.log
-│   ├── bamindex
-│   │   └── data
-│   │       └── abra
-│   ├── bamstats
-│   │   └── mergeallbamstats.log
-│   ├── bamstats_sample
-│   │   ├── bwa~Sorghum~con.tsv
-│   │   ├── bwa~Sorghum~D2.tsv
-│   │   └── bwa~Sorghum~D3.tsv
-│   ├── bcf2vcf
-│   │   └── data
-│   │       └── variants
-│   │           └── final
-│   │               ├── freebayes~bwa~Sorghum~all_samples~filtered-default.log
-│   │               └── freebayes~bwa~Sorghum~all_samples~filtered-strict.log
-│   ├── bcffilter
-│   │   └── freebayes~bwa~Sorghum~all_samples
-│   │       ├── default
-│   │       │   ├── Chr02_region1M_2M:000000001-001000000.log
-│   │       │   └── Chr04_region1M_2M:000000001-001000000.log
-│   │       └── strict
-│   │           ├── Chr02_region1M_2M:000000001-001000000.log
-│   │           └── Chr04_region1M_2M:000000001-001000000.log
-│   ├── bwa
-│   │   └── Sorghum
-│   │       ├── run_1
-│   │       │   ├── con.log
-│   │       │   ├── D2.log
-│   │       │   └── D3.log
-│   │       └── run_2
-│   │           └── con.log
-│   ├── freebayes
-│   │   └── bwa~Sorghum~all_samples
-│   │       ├── Chr02_region1M_2M:000000001-001000000.benchmark
-│   │       ├── Chr02_region1M_2M:000000001-001000000.log
-│   │       ├── Chr04_region1M_2M:000000001-001000000.benchmark
-│   │       └── Chr04_region1M_2M:000000001-001000000.log
-│   ├── markdup
-│   │   └── bwa
-│   │       └── Sorghum
-│   │           ├── run_1
-│   │           │   ├── con.log
-│   │           │   ├── D2.log
-│   │           │   └── D3.log
-│   │           └── run_2
-│   │               └── con.log
-│   ├── mash
-│   │   ├── dist
-│   │   │   └── k21-s1e5-all_samples.log
-│   │   └── sketch
-│   │       └── k21-s1e5-all_samples.log
-│   ├── mergebcf
-│   │   ├── freebayes~bwa~Sorghum~all_samples_filtered~default.log
-│   │   └── freebayes~bwa~Sorghum~all_samples_filtered~strict.log
-│   ├── mergesamplebam
-│   │   └── bwa
-│   │       └── Sorghum
-│   │           ├── con.log
-│   │           ├── D2.log
-│   │           └── D3.log
-│   ├── mergesetbam
-│   │   └── bwa
-│   │       └── Sorghum
-│   │           └── all_samples.log
-│   ├── qualimap_sample
-│   │   ├── bwa~Sorghum~con.log
-│   │   ├── bwa~Sorghum~D2.log
-│   │   └── bwa~Sorghum~D3.log
-│   ├── readstats
-│   │   └── seqhax-stats-librun.log
-│   └── samplefastq
 ├── plots
 │   └── quals.svg
 ├── readme
@@ -340,4 +258,4 @@ data/
             ├── Chr02_region1M_2M:000000001-001000000.bcf
             └── Chr04_region1M_2M:000000001-001000000.bcf
 
-98 directories, 242 files
+56 directories, 202 files

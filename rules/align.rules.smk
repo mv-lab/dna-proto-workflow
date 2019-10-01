@@ -25,7 +25,7 @@ rule align_stats:
     output:
         expand("data/alnstats/everything_{type}.csv",
                type=["SN", "IS", "COV"])
-    log: "data/log/bamstats/mergeallbamstats.log"
+    log: "log/align/bamstats/mergeallbamstats.log"
     shell:
         "python3 scripts/tidybamstat.py"
         "   -o data/alnstats/everything"  # prefix
@@ -61,7 +61,7 @@ rule ngmap:
     output:
         bam=temp("data/alignments/byrun.raw/ngm/{ref}/{run}/{lib}.bam"),
     log:
-        "data/log/ngm/{ref}/{run}/{lib}.log"
+        "log/align/ngm/{ref}/{run}/{lib}.log"
     threads:
         8
     params:
@@ -86,7 +86,7 @@ rule bwamem:
         ref=lambda wc: config['refs'][wc.ref],
     output:
         bam=temp("data/alignments/byrun.raw/bwa/{ref}/{run}/{lib}.bam"),
-    log: "data/log/bwa/{ref}/{run}/{lib}.log"
+    log: "log/align/bwa/{ref}/{run}/{lib}.log"
     threads:
         8
     params:
@@ -109,7 +109,7 @@ rule bam_markdups_sort:
     output:
         bam=temp("data/alignments/byrun/{aligner}/{ref}/{run}/{lib}.bam"),
     threads: 4
-    log: "data/log/markdup/{aligner}/{ref}/{run}/{lib}.log"
+    log: "log/align/markdup/{aligner}/{ref}/{run}/{lib}.log"
     shell:
         "( samtools fixmate "
         "   -m"
@@ -141,7 +141,7 @@ rule mergebam_samp:
     output:
         bam="data/alignments/samples/{aligner}/{ref}/{sample}.bam",
     log:
-        "data/log/mergesamplebam/{aligner}/{ref}/{sample}.log"
+        "log/align/mergesamplebam/{aligner}/{ref}/{sample}.log"
     threads: 8
     priority: 1 # so the temps get cleaned sooner
     shell:
@@ -159,7 +159,7 @@ rule qualimap_samp:
     output:
         "data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
     log:
-        "data/log/qualimap_sample/{aligner}~{ref}~{sample}.log"
+        "log/align/qualimap_sample/{aligner}~{ref}~{sample}.log"
     threads: 4
     shell:
         "( unset DISPLAY; qualimap bamqc"
@@ -195,7 +195,7 @@ rule mergebam_set:
         bam="data/alignments/sets/{aligner}~{ref}~{sampleset}.bam",
         bai="data/alignments/sets/{aligner}~{ref}~{sampleset}.bam.bai",
     log:
-        "data/log/mergesetbam/{aligner}/{ref}/{sampleset}.log"
+        "log/align/mergesetbam/{aligner}/{ref}/{sampleset}.log"
     threads: 4
     shell:
         "( samtools merge"
@@ -215,7 +215,7 @@ rule bamstat_samps:
     output:
         "data/alignments/bamstats/sample/{aligner}~{ref}~{sample}.tsv",
     log:
-        "data/log/bamstats_sample/{aligner}~{ref}~{sample}.tsv"
+        "log/align/bamstats_sample/{aligner}~{ref}~{sample}.tsv"
     shell:
         "(samtools stats -i 5000 -x {input} >{output}) >{log}"
 
@@ -229,7 +229,7 @@ rule bamidx:
     output:
         "{path}.bam.bai"
     log:
-        "data/log/bamindex/{path}.log"
+        "log/align/bamindex/{path}.log"
     shell:
         "samtools index {input}"
 

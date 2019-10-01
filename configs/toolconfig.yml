@@ -17,6 +17,7 @@ init:
 refs:
   Sorghum: genomes_and_annotations/genomes/Sorghum/genome.fa
 
+
 mapping:
   aligners:
     - bwa
@@ -37,7 +38,7 @@ denovodist:
   mash_sketchsize: 1e5
   sourmash_sketchsize: 1e5
   ksize: 21
-  kwip_sets: []
+  kwip_sets: [] 
   mash_sets: # we can subset from everything for (sour)mash
     - all_samples
   sourmash_sets: []
