@@ -14,7 +14,6 @@ rule align_samples:
                aligner=config["mapping"]["aligners"],
                sample=SAMP2RUNLIB),
 
-
 localrules: align_stats
 rule align_stats:
     input:
@@ -78,6 +77,7 @@ rule ngmap:
         "   --sensitivity {params.sensitivity}" # this is the mean from a bunch of different runs
         "| samtools view -Suh - >{output.bam}"
         " ) >{log} 2>&1"
+
 
 rule bwamem:
     input:
@@ -243,7 +243,6 @@ rule sam2bam:
 
 
 ### Align targets
-
 
 allsets = set(
     list(config["mapping"]["samplesets"]) +

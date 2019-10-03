@@ -1,6 +1,6 @@
-run,library,sample,Include
-run_1,con,con,Y
-run_1,D2,D2,Y
-run_1,D3,D3,Y
-run_2,con,con,Y
+run,library,sample,fq1,fq2,il_fq,platform,include
+run_1,con,con,,,samples/il_reads/con.fastq.gz,Illumina,Y
+run_1,D2,D2,,,samples/il_reads/D2.fastq.gz,Illumina,Y
+run_1,D3,D3,,,samples/il_reads/D3.fastq.gz,Illumina,Y
+run_2,con,con,,,samples/il_reads/con.fastq.gz,Illumina,Y
 

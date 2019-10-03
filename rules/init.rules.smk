@@ -4,12 +4,12 @@
 
 from utils import snkmk
 import os
+import pandas as pd
 
 configfile: "configs/toolconfig.yml"
 configfile: "configs/runconfig.yml"
-report: "../report/workflow.rst"
 
-shell.prefix = "set -euo pipefail; "
+shell.prefix = "set -euo pipefail;"
 
 wildcard_constraints:
     run="[^/]+",
@@ -22,43 +22,36 @@ wildcard_constraints:
 snkmk.create_fai()
 snkmk.create_contigs_file()
 
-#RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp("metadata/sample2runlib.csv")
-#SAMPLESETS = snkmk.make_samplesets(s2rl_file="metadata/sample2runlib.csv", setfile_glob="metadata/samplesets/*.txt")
-#VARCALL_REGIONS = snkmk.make_regions(config["refs"], window=config["varcall"]["chunksize"])
+RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp(config['samples'])
+SAMPLESETS = snkmk.make_samplesets(s2rl_file=config['samples'], setfile_glob="metadata/samplesets/*.txt")
+VARCALL_REGIONS = snkmk.make_regions(config["refs"], window=config["varcall"]["chunksize"])
 
-rule prepare_ref:
-    input:
-        "genomes_and_annotations/genomes/{ref}/genome.fa",
-        name = lambda wc: config['init']['refs'][wc.ref],
-        ref = lambda wc: config['refs'][name],
-    output:
-        "genomes_and_annotations/genomes/{ref}/genome.fa.fai"
-    log:
-        "log/init/create_fai.log"
-    shell:
-        "samtools faidx {input} 2> {log}"
+units = pd.read_csv(config['samples'], dtype=str).set_index(["run", "library"], drop=False)
+units.index = units.index.set_levels([i.astype(str) for i in units.index.levels])  # enforce str in index
+#print (units)
 
-rule contigs:
-    input:
-        "genomes_and_annotations/genomes/{ref}/genome.fa.fai",
-        ref = lambda wc: config['init']['refs'][wc.ref],
-    output:
-        "metadata/contigs_of_interest.bed"
-    log:
-        "log/init/create_contigs.log"
-    shell:
-        "awk r'BEGIN {FS='\t\t'}; {print $1 FS '0' FS $2}' {input} > {output} 2> {log}"
+
+def get_il_fastq(wildcards):
+    """Get fastq files of given metadata."""
+    fastqs = units.loc[(wildcards.run, wildcards.lib), ["il_fq"]].dropna()
+    return {"r1": fastqs.il_fq}
+
+
+def get_fr_fastq(wildcards):
+    """Get fastq files of given metadata."""
+    fastqs = units.loc[(wildcards.run, wildcards.lib), ["fq1", "fq2"]].dropna()
+    return {"r1": fastqs.fq1, "r2": fastqs.fq2}
 
 
 rule align_prepare_reference:
     input:
-        "genomes_and_annotations/genomes/Sorghum/genome.fa"
+        "genomes_and_annotations/genomes/{ref}/{file}.fa",
+        ref=lambda wc: config['refs'][wc.ref],
     output:
-        expand("genomes_and_annotations/genomes/Sorghum/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"])
+        "genomes_and_annotations/genomes/{ref}/{file}.fa.amb",
+        "genomes_and_annotations/genomes/{ref}/{file}.fa.ann",
+        "genomes_and_annotations/genomes/{ref}/{file}.fa.bwt",
+        "genomes_and_annotations/genomes/{ref}/{file}.fa.pac",
+        "genomes_and_annotations/genomes/{ref}/{file}.fa.sa"
     shell:
         "bwa index {input}"
-
-rule init:
-    input:
-        #rules.contigs.output,
-        #rules.prepare_ref.output,

@@ -3,8 +3,6 @@
 #######################################################################
 
 
-VARCALL_REGIONS = snkmk.make_regions(config["refs"], window=config["varcall"]["chunksize"])
-
 ##### Target rules #####
 
 def raw_variant_calls_input(wildcards):
@@ -41,7 +39,8 @@ rule varcall:
 
 rule abra2:
     input:
-        "data/alignments/sets/{aligner}~{ref}~all_samples.bam",
+        contigs = "metadata/contigs_of_interest.bed",
+        set = "data/alignments/sets/{aligner}~{ref}~all_samples.bam",
         ref=lambda wc: config['refs'][wc.ref],
     output:
         "data/abra/{aligner}~{ref}~{sampleset}.bam",
@@ -60,11 +59,11 @@ rule abra2:
         "( java"
         "   -{params.mem}"
         "   -jar {params.abra_release}"
-        "   --in {input}"
+        "   --in {input.set}"
         "   --out {output}"
         "   --ref {params.ref}"
         "   --threads {params.threads}"
-        "   --targets {params.region}"
+        "   --targets {input.contigs}"
         "   --tmpdir {params.abra_temp}"
         ") >{log} 2>&1"
 

@@ -2,12 +2,6 @@
 #                            Read-level QC                            #
 #######################################################################
 
-
-RUNLIB2SAMP, SAMP2RUNLIB = snkmk.make_runlib2samp("metadata/sample2runlib.csv")
-
-SAMPLESETS = snkmk.make_samplesets(s2rl_file="metadata/sample2runlib.csv", setfile_glob="metadata/samplesets/*.txt")
-
-
 ##### Target rules #####
 
 rule qc_runlib:
@@ -18,7 +12,7 @@ rule qc_runlib:
 rule read_stats:
     input:
         "data/stats/reads/readnum_librun.tsv",
-        #"data/stats/reads/readnum_samples.tsv",
+        "data/stats/reads/readnum_samples.tsv",
 
 rule qc_samples:
     input:
@@ -33,11 +27,13 @@ rule readqc:
 
 ##### Actual rules #####
 
+
 ruleorder: qcreads_il > qcreads
 rule qcreads:
     input:
-        r1="rawdata/runs/{run}/{lib}_R1.fastq.gz",
-        r2="rawdata/runs/{run}/{lib}_R2.fastq.gz",
+        unpack(get_fr_fastq)
+        #r1="rawdata/runs/{run}/{lib}_R1.fastq.gz",
+        #r2="rawdata/runs/{run}/{lib}_R2.fastq.gz",
     output:
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
     log:
@@ -74,7 +70,7 @@ rule qcreads:
 #localrules: qcreads
 rule qcreads_il:
     input:
-        il="rawdata/runs/{run}/{lib}.fastq.gz",
+        unpack(get_il_fastq),
     output:
         reads="data/reads/runs/{run}/{lib}.fastq.gz",
     log:
@@ -88,7 +84,7 @@ rule qcreads_il:
         minqual=lambda wc: config["qc"].get(wc.run, config["qc"]["_DEFAULT_"])["minqual"],
     shell:
         "( AdapterRemoval"
-        "   --file1 {input.il}"
+        "   --file1 {input}"
         "   --adapter1 {params.adp1}"
         "   --adapter2 {params.adp2}"
         "   --combined-output"
@@ -112,8 +108,10 @@ localrules: samplefastq
 rule samplefastq:
     input:
         lambda wc: ["data/reads/runs/{run}/{lib}.fastq.gz".format(run=r, lib=l) for r, l in SAMP2RUNLIB[wc.sample]],
-    output: "data/reads/samples/{sample}.fastq.gz"
-    log: "log/samplefastq/{sample}.log"
+    output:
+        "data/reads/samples/{sample}.fastq.gz"
+    log:
+        "log/samplefastq/{sample}.log"
     threads: 1
     shell:
         "cat {input} > {output}"

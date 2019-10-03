@@ -235,7 +235,8 @@ data/
 │   │   └── run_2
 │   │       └── con.txt
 │   └── reads
-│       └── readnum_librun.tsv
+│       ├── readnum_librun.tsv
+│       └── readnum_samples.tsv
 └── variants
     ├── filter_split
     │   ├── freebayes~bwa~Sorghum~all_samples_filtered~default
@@ -258,4 +259,4 @@ data/
             ├── Chr02_region1M_2M:000000001-001000000.bcf
             └── Chr04_region1M_2M:000000001-001000000.bcf
 
-56 directories, 202 files
+56 directories, 203 files

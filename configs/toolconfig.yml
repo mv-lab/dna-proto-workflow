@@ -1,3 +1,6 @@
+
+samples: "metadata/sample2runlib.csv"
+
 qc:
   _DEFAULT_:
     adapter1: CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG
@@ -10,9 +13,6 @@ qc:
 
 sample_sets: []
 
-init:
-  refs:
-    - Sorghum
 
 refs:
   Sorghum: genomes_and_annotations/genomes/Sorghum/genome.fa
@@ -27,6 +27,7 @@ mapping:
     - all_samples
   ngm:
     sensitivity: 0.5
+
 
 snpeff:
   name: Sorghum_bicolor_NCBIv3.42
@@ -49,7 +50,7 @@ varcall:
     ngm: 10
   minbq: 15
   theta_prior: 0.1 # approx 10% of sites vary, it seems. Crazy!
-  chunksize: 1000000000
+  chunksize: 1000000
   aligners:
     - bwa
   callers:

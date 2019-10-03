@@ -6,15 +6,15 @@ import os
 from sys import stderr
 
 
-
 def create_contigs_file():
-    # Prepare contigs of interest (bed)
+    ''' Prepare contigs of interest (bed)'''
     is_contigs = os.path.exists('metadata/contigs_of_interest.bed')
     if not is_contigs:
         os.system(r'awk -f utils/contigs.bed.awk genomes_and_annotations/genomes/Sorghum/genome.fa.fai > metadata/contigs_of_interest.bed')
 
 
 def create_fai():
+    ''' Index reference (fai)'''
     is_fai = os.path.exists('rawdata/reference/genome.fa.fai')
     if not is_fai:
         os.system('samtools faidx genomes_and_annotations/genomes/Sorghum/genome.fa ')
@@ -82,6 +82,7 @@ def _iter_metadata(s2rl_file):
 def make_runlib2samp(s2rl_file):
     rl2s = {}
     s2rl = defaultdict(list)
+
     for run in _iter_metadata(s2rl_file):
         if not run["library"] or run["library"].lower().startswith("blank"):
             # Skip blanks
@@ -93,6 +94,8 @@ def make_runlib2samp(s2rl_file):
         samp = run["sample"]
         rl2s[rl] = samp
         s2rl[samp].append(rl)
+    print ('RUNLIB2SAMP: ',dict(rl2s))
+    print ('SAMP2RUNLIB: ',dict(s2rl))
     return dict(rl2s), dict(s2rl)
 
 
@@ -131,4 +134,6 @@ def make_samplesets(s2rl_file, setfile_glob):
                 print("WARNING: updating sample sets, this will trigger reruns", setname, file=stderr)
                 for s in sorted(setsamps):
                     print(s, file=fh)
+
+    print ('SAMPLESETS: ', {n: list(sorted(set(s))) for n, s in ssets.items()} )
     return {n: list(sorted(set(s))) for n, s in ssets.items()}
