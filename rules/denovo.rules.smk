@@ -7,21 +7,21 @@
 
 rule kwip:
     input:
-        expand("data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
+        expand("output/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
                ksize=config["denovodist"]["ksize"],
                sketchsize=config["denovodist"]["kwip_sketchsize"],
                set=config["denovodist"]["kwip_sets"]),
 
 rule sourmash:
     input:
-        expand("data/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
+        expand("output/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
                ksize=config["denovodist"]["ksize"],
                sketchsize=config["denovodist"]["sourmash_sketchsize"],
                set=config["denovodist"]["sourmash_sets"]),
 
 rule mash:
     input:
-        expand("data/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
+        expand("output/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
                ksize=config["denovodist"]["ksize"],
                sketchsize=config["denovodist"]["mash_sketchsize"],
                set=config["denovodist"]["mash_sets"]),
@@ -30,7 +30,7 @@ rule pca:
     input:
         rules.mash.input,
     output:
-        "plots/denovo/mash/pca.pdf"
+        "output/plots/denovo/mash/pca.pdf"
     script:
         "../scripts/pca.R"
 
@@ -47,12 +47,12 @@ rule denovo:
 
 rule mashsketch:
     input:
-        lambda wc: expand("data/reads/samples/{sample}.fastq.gz",
+        lambda wc: expand("output/reads/samples/{sample}.fastq.gz",
                           sample=SAMPLESETS[wc.set]),
     output:
-        temp("data/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"),
+        temp("output/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"),
     log:
-        "log/denovo/mash/sketch/k{ksize}-s{sketchsize}-{set}.log"
+        "output/log/denovo/mash/sketch/k{ksize}-s{sketchsize}-{set}.log"
     threads: 27
     shell:
         " mash sketch"
@@ -66,11 +66,11 @@ rule mashsketch:
 
 rule mashdist:
     input:
-        "data/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"
+        "output/denovo/mash/k{ksize}-s{sketchsize}/{set}.msh"
     output:
-        dist="data/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
+        dist="output/denovo/mash/k{ksize}-s{sketchsize}/{set}.dist",
     log:
-        "log/denovo/mash/dist/k{ksize}-s{sketchsize}-{set}.log"
+        "output/log/denovo/mash/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads: 27
     shell:
         "mash dist"
@@ -82,13 +82,13 @@ rule mashdist:
 
 rule countsketch:
     input:
-        "data/reads/samples/{sample}.fastq.gz",
+        "output/reads/samples/{sample}.fastq.gz",
     output:
-        ct=temp("data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz"),
-        info="data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info",
-        tsv="data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info.tsv",
+        ct=temp("output/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz"),
+        info="output/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info",
+        tsv="output/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz.info.tsv",
     log:
-        "log/denovo/kwip/sketch/k{ksize}-s{sketchsize}-{sample}.log"
+        "output/log/denovo/kwip/sketch/k{ksize}-s{sketchsize}-{sample}.log"
     threads:
         3
     shell:
@@ -106,14 +106,14 @@ rule countsketch:
 
 rule kwipdist:
     input:
-        lambda wc: expand("data/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz",
+        lambda wc: expand("output/denovo/kwip/sketch/k{ksize}-s{sketchsize}/{sample}.ct.gz",
                             ksize=wc.ksize, sketchsize=wc.sketchsize,
                             sample=SAMPLESETS[wc.set]),
     output:
-        d="data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
-        k="data/denovo/kwip/k{ksize}-s{sketchsize}/{set}.kern",
+        d="output/denovo/kwip/k{ksize}-s{sketchsize}/{set}.dist",
+        k="output/denovo/kwip/k{ksize}-s{sketchsize}/{set}.kern",
     log:
-        "log/denovo/kwip/dist/k{ksize}-s{sketchsize}-{set}.log"
+        "output/log/denovo/kwip/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads:
         4
     shell:
@@ -126,16 +126,16 @@ rule kwipdist:
 
 rule unique_kmers:
     input:
-        lambda wc: expand("data/reads/samples/{sample}.fastq.gz",
+        lambda wc: expand("output/reads/samples/{sample}.fastq.gz",
                           sample=SAMPLESETS[wc.set]),
     output:
-        "data/readstats/unique-kmers/{set}.tsv",
+        "output/readstats/unique-kmers/{set}.tsv",
     threads:
         27
     params:
         kmersize=config["denovodist"]["ksize"],
     log:
-        "log/denovo/readstats/unique-kmers/{set}.log",
+        "output/log/denovo/readstats/unique-kmers/{set}.log",
     shell:
         "( kdm-unique-kmers.py"
         "    -t {threads}"
@@ -147,11 +147,11 @@ rule unique_kmers:
 
 rule sourmash_sketch:
     input:
-        "data/reads/samples/{sample}.fastq.gz",
+        "output/reads/samples/{sample}.fastq.gz",
     output:
-        temp("data/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh"),
+        temp("output/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh"),
     log:
-        "log/denovo/sourmash/sketch/k{ksize}-s{sketchsize}-{sample}.log"
+        "output/log/denovo/sourmash/sketch/k{ksize}-s{sketchsize}-{sample}.log"
     shell:
         "( sourmash compute"
         "   --name '{wildcards.sample}'"
@@ -163,13 +163,13 @@ rule sourmash_sketch:
 
 rule sourmash_dist:
     input:
-        lambda wc: expand("data/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh",
+        lambda wc: expand("output/denovo/sourmash/sketch/k{ksize}-s{sketchsize}/{sample}.smh",
                             ksize=wc.ksize, sketchsize=wc.sketchsize,
                             sample=SAMPLESETS[wc.set]),
     output:
-        "data/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
+        "output/denovo/sourmash/k{ksize}-s{sketchsize}/{set}.dist",
     log:
-        "log/denovo/sourmash/dist/k{ksize}-s{sketchsize}-{set}.log"
+        "output/log/denovo/sourmash/dist/k{ksize}-s{sketchsize}-{set}.log"
     threads: 1
     shell:
         "(sourmash compare -k {wildcards.ksize} -o {output} {input} ) >{log} 2>&1"

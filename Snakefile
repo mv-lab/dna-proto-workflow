@@ -19,3 +19,4 @@ rule all:
         rules.align.input,
         rules.varcall.input,
         rules.stats.input,
+        rules.snpeff.output,

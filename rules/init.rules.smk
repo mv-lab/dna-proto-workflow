@@ -6,8 +6,7 @@ from utils import snkmk
 import os
 import pandas as pd
 
-configfile: "configs/toolconfig.yml"
-configfile: "configs/runconfig.yml"
+configfile: "config.yml"
 
 shell.prefix = "set -euo pipefail;"
 
@@ -45,13 +44,12 @@ def get_fr_fastq(wildcards):
 
 rule align_prepare_reference:
     input:
-        "genomes_and_annotations/genomes/{ref}/{file}.fa",
-        ref=lambda wc: config['refs'][wc.ref],
+        ref = lambda wc: config['refs'][wc.ref]
     output:
-        "genomes_and_annotations/genomes/{ref}/{file}.fa.amb",
-        "genomes_and_annotations/genomes/{ref}/{file}.fa.ann",
-        "genomes_and_annotations/genomes/{ref}/{file}.fa.bwt",
-        "genomes_and_annotations/genomes/{ref}/{file}.fa.pac",
-        "genomes_and_annotations/genomes/{ref}/{file}.fa.sa"
+        "genomes_and_annotations/{ref}/{ref}.fa.amb",
+        "genomes_and_annotations/{ref}/{ref}.fa.ann",
+        "genomes_and_annotations/{ref}/{ref}.fa.bwt",
+        "genomes_and_annotations/{ref}/{ref}.fa.pac",
+        "genomes_and_annotations/{ref}/{ref}.fa.sa"
     shell:
-        "bwa index {input}"
+        "bwa index -a bwtsw {input.ref}"

@@ -1,6 +1,6 @@
-run,library,sample,fq1,fq2,il_fq,platform,include
-run_1,con,con,,,samples/il_reads/con.fastq.gz,Illumina,Y
-run_1,D2,D2,,,samples/il_reads/D2.fastq.gz,Illumina,Y
-run_1,D3,D3,,,samples/il_reads/D3.fastq.gz,Illumina,Y
-run_2,con,con,,,samples/il_reads/con.fastq.gz,Illumina,Y
+run,library,sample,fq1,fq2,il_fq,cohort,platform,include
+run_1,con,con,samples/fr_reads/con_R1.fq.gz,samples/fr_reads/con_R2.fq.gz,,con,Illumina,Y
+run_1,D2,D2,samples/fr_reads/D2_R1.fq.gz,samples/fr_reads/D2_R2.fq.gz,,mutant,Illumina,Y
+run_1,D3,D3,samples/fr_reads/D3_R1.fq.gz,samples/fr_reads/D3_R2.fq.gz,,mutant,Illumina,Y
+run_2,con,con,samples/fr_reads/con_R1.fq.gz,samples/fr_reads/con_R2.fq.gz,,con,Illumina,Y
 

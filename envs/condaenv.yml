@@ -20,3 +20,4 @@ dependencies:
   - pandas =0.23
   - seaborn =0.8
   - r-rgl
+  - rust

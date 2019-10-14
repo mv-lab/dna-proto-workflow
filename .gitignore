@@ -2,20 +2,12 @@
 .snakemake/
 */.snakemake.*
 
-# Ignore notes, txt etc
-command
-
 # PyCache
 */__pycache__
 
 # generated data files
-data/*
-!data/readme
-log/
-plots/
+output/*
+!output/readme
 
 # rawdata (size problem)
-#rawdata/reference/*
-#rawdata/snpeffdata/genomes/*
-rawdata/snpeffdata/*
 genomes_and_annotations/snpeffdata/

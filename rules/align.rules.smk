@@ -9,25 +9,26 @@
 localrules: align_samples
 rule align_samples:
     input:
-        expand("data/alignments/samples/{aligner}/{ref}/{sample}.bam",
+        expand("output/alignments/samples/{aligner}/{ref}/{sample}.bam",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"],
                sample=SAMP2RUNLIB),
 
+
 localrules: align_stats
 rule align_stats:
     input:
-        expand("data/alignments/bamstats/sample/{aligner}~{ref}~{sample}.tsv",
+        expand("output/alignments/bamstats/sample/{aligner}~{ref}~{sample}.tsv",
                aligner=config["mapping"]["aligners"],
                ref=config["mapping"]["refs"],
                sample=SAMPLESETS["all_samples"]),
     output:
-        expand("data/alnstats/everything_{type}.csv",
+        expand("output/alnstats/everything_{type}.csv",
                type=["SN", "IS", "COV"])
-    log: "log/align/bamstats/mergeallbamstats.log"
+    log: "output/log/align/bamstats/mergeallbamstats.log"
     shell:
         "python3 scripts/tidybamstat.py"
-        "   -o data/alnstats/everything"  # prefix
+        "   -o output/alnstats/everything"  # prefix
         "   {input}"
         ">{log} 2>&1"
 
@@ -36,16 +37,16 @@ rule align:
    input:
         rules.align_samples.input,
         rules.align_stats.output,
-        expand("data/alignments/sets/{aligner}~{ref}~all_samples.bam",
+        expand("output/alignments/sets/{aligner}~{ref}~all_samples.bam",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"]),
-        expand("data/alignments/bamlists/{aligner}~{ref}~all_samples.bamlist",
+        expand("output/alignments/bamlists/{aligner}~{ref}~all_samples.bamlist",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"]),
-        expand("data/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
+        expand("output/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"]),
-        expand("data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
+        expand("output/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
                aligner=config["mapping"]["aligners"],
                ref=config["mapping"]["refs"],
                sample=SAMPLESETS["all_samples"]),
@@ -55,12 +56,12 @@ rule align:
 
 rule ngmap:
     input:
-        reads="data/reads/runs/{run}/{lib}.fastq.gz",
+        reads="output/reads/runs/{run}/{lib}.fastq.gz",
         ref=lambda wc: config['refs'][wc.ref],
     output:
-        bam=temp("data/alignments/byrun.raw/ngm/{ref}/{run}/{lib}.bam"),
+        bam=temp("output/alignments/byrun.raw/ngm/{ref}/{run}/{lib}.bam"),
     log:
-        "log/align/ngm/{ref}/{run}/{lib}.log"
+        "output/log/align/ngm/{ref}/{run}/{lib}.log"
     threads:
         8
     params:
@@ -78,15 +79,15 @@ rule ngmap:
         "| samtools view -Suh - >{output.bam}"
         " ) >{log} 2>&1"
 
-
 rule bwamem:
     input:
-        expand("genomes_and_annotations/genomes/Sorghum/genome.fa.{ext}", ext=["amb", "ann", "bwt", "pac", "sa"]),
-        reads="data/reads/runs/{run}/{lib}.fastq.gz",
+        files=lambda wc: expand("{path}.{ext}", path=config['refs'][wc.ref], ext=["amb", "ann", "bwt", "pac", "sa"]),
+        reads="output/reads/runs/{run}/{lib}.fastq.gz",
         ref=lambda wc: config['refs'][wc.ref],
     output:
-        bam=temp("data/alignments/byrun.raw/bwa/{ref}/{run}/{lib}.bam"),
-    log: "log/align/bwa/{ref}/{run}/{lib}.log"
+        bam=temp("output/alignments/byrun.raw/bwa/{ref}/{run}/{lib}.bam"),
+
+    log: "output/log/align/bwa/{ref}/{run}/{lib}.log"
     threads:
         8
     params:
@@ -102,14 +103,45 @@ rule bwamem:
         " ) >{log} 2>&1"
 
 
-rule bam_markdups_sort:
+rule abra2:
     input:
-        bam="data/alignments/byrun.raw/{aligner}/{ref}/{run}/{lib}.bam",
+        contigs = "metadata/contigs_of_interest.bed",
+        set = "output/alignments/sets/{aligner}~{ref}~{sampleset}.bam",
         ref=lambda wc: config['refs'][wc.ref],
     output:
-        bam=temp("data/alignments/byrun/{aligner}/{ref}/{run}/{lib}.bam"),
+        "output/abra/{aligner}~{ref}~{sampleset}.bam",
+    log:
+        "output/log/varcall/abra/{aligner}~{ref}~{sampleset}.log"
+    benchmark:
+        "output/log/varcall/abra/{aligner}~{ref}~{sampleset}.benchmark"
+    params:
+        region = config['abra2']['regions'],
+        ref = lambda wc: config['refs'][wc.ref],
+        threads = config['abra2']['threads'],
+        abra_temp = config['abra2']['temp'],
+        abra_release = config['abra2']['release'],
+        mem= config['abra2']['memory'],
+    shell:
+        "( java"
+        "   -{params.mem}"
+        "   -jar {params.abra_release}"
+        "   --in {input.set}"
+        "   --out {output}"
+        "   --ref {params.ref}"
+        "   --threads {params.threads}"
+        "   --targets {params.region}"
+        "   --tmpdir {params.abra_temp}"
+        ") >{log} 2>&1"
+
+
+rule bam_markdups_sort:
+    input:
+        bam="output/alignments/byrun.raw/{aligner}/{ref}/{run}/{lib}.bam",
+        ref=lambda wc: config['refs'][wc.ref],
+    output:
+        bam=temp("output/alignments/byrun/{aligner}/{ref}/{run}/{lib}.bam"),
     threads: 4
-    log: "log/align/markdup/{aligner}/{ref}/{run}/{lib}.log"
+    log: "output/log/align/markdup/{aligner}/{ref}/{run}/{lib}.log"
     shell:
         "( samtools fixmate "
         "   -m"
@@ -135,13 +167,13 @@ rule bam_markdups_sort:
 
 rule mergebam_samp:
     input:
-        lambda wc: ["data/alignments/byrun/{aln}/{ref}/{run}/{lib}.bam".format(
+        lambda wc: ["output/alignments/byrun/{aln}/{ref}/{run}/{lib}.bam".format(
                             run=r, lib=l, aln=wc.aligner, ref=wc.ref)
 	                for r, l in SAMP2RUNLIB[wc.sample]]
     output:
-        bam="data/alignments/samples/{aligner}/{ref}/{sample}.bam",
+        bam="output/alignments/samples/{aligner}/{ref}/{sample}.bam",
     log:
-        "log/align/mergesamplebam/{aligner}/{ref}/{sample}.log"
+        "output/log/align/mergesamplebam/{aligner}/{ref}/{sample}.log"
     threads: 8
     priority: 1 # so the temps get cleaned sooner
     shell:
@@ -155,11 +187,11 @@ rule mergebam_samp:
 
 rule qualimap_samp:
     input:
-        bam="data/alignments/samples/{aligner}/{ref}/{sample}.bam",
+        bam="output/alignments/samples/{aligner}/{ref}/{sample}.bam",
     output:
-        "data/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
+        "output/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
     log:
-        "log/align/qualimap_sample/{aligner}~{ref}~{sample}.log"
+        "output/log/align/qualimap_sample/{aligner}~{ref}~{sample}.log"
     threads: 4
     shell:
         "( unset DISPLAY; qualimap bamqc"
@@ -175,11 +207,11 @@ rule qualimap_samp:
 #localrules: bamlist
 rule bamlist:
     input:
-        lambda wc: expand("data/alignments/samples/{aligner}/{ref}/{sample}.bam",
+        lambda wc: expand("output/alignments/samples/{aligner}/{ref}/{sample}.bam",
                           aligner=wc.aligner, ref=wc.ref, sample=SAMPLESETS[wc.sampleset]),
 
     output:
-        "data/alignments/bamlists/{aligner}~{ref}~{sampleset}.bamlist",
+        "output/alignments/bamlists/{aligner}~{ref}~{sampleset}.bamlist",
     run:
         with open(output[0], "w") as fh:
             for s in input:
@@ -188,14 +220,14 @@ rule bamlist:
 
 rule mergebam_set:
     input:
-        lambda wc: expand("data/alignments/samples/{aligner}/{ref}/{sample}.bam",
+        lambda wc: expand("output/alignments/samples/{aligner}/{ref}/{sample}.bam",
                           aligner=wc.aligner, ref=wc.ref, sample=SAMPLESETS[wc.sampleset]),
 
     output:
-        bam="data/alignments/sets/{aligner}~{ref}~{sampleset}.bam",
-        bai="data/alignments/sets/{aligner}~{ref}~{sampleset}.bam.bai",
+        bam="output/alignments/sets/{aligner}~{ref}~{sampleset}.bam",
+        bai="output/alignments/sets/{aligner}~{ref}~{sampleset}.bam.bai",
     log:
-        "log/align/mergesetbam/{aligner}/{ref}/{sampleset}.log"
+        "output/log/align/mergesetbam/{aligner}/{ref}/{sampleset}.log"
     threads: 4
     shell:
         "( samtools merge"
@@ -211,11 +243,11 @@ rule mergebam_set:
 localrules: bamstat_samps
 rule bamstat_samps:
     input:
-        "data/alignments/samples/{aligner}/{ref}/{sample}.bam",
+        "output/alignments/samples/{aligner}/{ref}/{sample}.bam",
     output:
-        "data/alignments/bamstats/sample/{aligner}~{ref}~{sample}.tsv",
+        "output/alignments/bamstats/sample/{aligner}~{ref}~{sample}.tsv",
     log:
-        "log/align/bamstats_sample/{aligner}~{ref}~{sample}.tsv"
+        "output/log/align/bamstats_sample/{aligner}~{ref}~{sample}.tsv"
     shell:
         "(samtools stats -i 5000 -x {input} >{output}) >{log}"
 
@@ -229,7 +261,7 @@ rule bamidx:
     output:
         "{path}.bam.bai"
     log:
-        "log/align/bamindex/{path}.log"
+        "output/log/align/bamindex/{path}.log"
     shell:
         "samtools index {input}"
 
@@ -252,7 +284,7 @@ allsets = set(
 
 rule align_librun:
     input:
-        lambda wc: ["data/alignments/byrun/{aln}/{ref}/{run}/{lib}.bam".
+        lambda wc: ["output/alignments/byrun/{aln}/{ref}/{run}/{lib}.bam".
                         format(run=r, lib=l, aln=a, ref=ref)
                         for r, l in RUNLIB2SAMP
                         for a in config["mapping"]["aligners"]
@@ -264,11 +296,11 @@ rule align_samplesets_all:
     # and ANGSD uses a list of filenames (which will be generated on the fly
     # for each ANGSD sample set)
     input:
-        expand("data/alignments/sets/{aligner}~{ref}~{sampleset}.bam",
+        expand("output/alignments/sets/{aligner}~{ref}~{sampleset}.bam",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"],
                sampleset=allsets),
-        expand("data/alignments/bamlists/{aligner}~{ref}~all_samples.bamlist",
+        expand("output/alignments/bamlists/{aligner}~{ref}~all_samples.bamlist",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"],
                sampleset=allsets),

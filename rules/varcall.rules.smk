@@ -11,7 +11,7 @@ def raw_variant_calls_input(wildcards):
         for aligner in config["varcall"]["aligners"]:
             for sampleset in config["varcall"]["samplesets"]:
                 for ref in config["varcall"]["refs"]:
-                    this_rawfiles = expand("data/variants/raw_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf",
+                    this_rawfiles = expand("output/variants/raw_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf",
                                            caller=caller, aligner=aligner, ref=ref, sampleset=sampleset, region=VARCALL_REGIONS[ref])
                     inputs.extend(this_rawfiles)
     return inputs
@@ -22,7 +22,7 @@ rule raw_variant_calls:
 
 rule filtered_variants:
     input:
-        expand("data/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.{ext}",
+        expand("output/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.{ext}",
                ext=["bcf", "bcf.csi", "vcf.gz", "vcf.gz.csi"],
                caller=config["varcall"]["callers"],
                aligner=config["varcall"]["aligners"],
@@ -37,51 +37,25 @@ rule varcall:
 
 ##### Actual rules #####
 
-rule abra2:
-    input:
-        contigs = "metadata/contigs_of_interest.bed",
-        set = "data/alignments/sets/{aligner}~{ref}~all_samples.bam",
-        ref=lambda wc: config['refs'][wc.ref],
-    output:
-        "data/abra/{aligner}~{ref}~{sampleset}.bam",
-    log:
-        "log/varcall/abra/{aligner}~{ref}~{sampleset}.log"
-    benchmark:
-        "log/varcall/abra/{aligner}~{ref}~{sampleset}.benchmark"
-    params:
-        region = config['abra2']['regions'],
-        ref = lambda wc: config['refs'][wc.ref],
-        threads = config['abra2']['threads'],
-        abra_temp = config['abra2']['temp'],
-        abra_release = config['abra2']['release'],
-        mem= config['abra2']['memory'],
-    shell:
-        "( java"
-        "   -{params.mem}"
-        "   -jar {params.abra_release}"
-        "   --in {input.set}"
-        "   --out {output}"
-        "   --ref {params.ref}"
-        "   --threads {params.threads}"
-        "   --targets {input.contigs}"
-        "   --tmpdir {params.abra_temp}"
-        ") >{log} 2>&1"
+
+#### Modify bam header.
 
 
 rule freebayes:
     input:
-        bam = "data/abra/{aligner}~{ref}~{sampleset}.bam",
-        bai = "data/abra/{aligner}~{ref}~{sampleset}.bam.bai",
-        #bam="data/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
-        #bai="data/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
-        sset="data/samplelists/{sampleset}.txt",
+        bam = "output/abra/{aligner}~{ref}~{sampleset}.bam",
+        bai = "output/abra/{aligner}~{ref}~{sampleset}.bam.bai",
+        #bam="output/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
+        #bai="output/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
+        sset="output/samplelists/{sampleset}.txt",
+        #sset="output/samplelists/test.txt",
         ref=lambda wc: config['refs'][wc.ref],
     output:
-        bcf="data/variants/raw_split/freebayes~{aligner}~{ref}~{sampleset}/{region}.bcf",
+        bcf="output/variants/raw_split/freebayes~{aligner}~{ref}~{sampleset}/{region}.bcf",
     log:
-        "log/varcall/freebayes/{aligner}~{ref}~{sampleset}/{region}.log"
+        "output/log/varcall/freebayes/{aligner}~{ref}~{sampleset}/{region}.log"
     benchmark:
-        "log/varcall/freebayes/{aligner}~{ref}~{sampleset}/{region}.benchmark"
+        "output/log/varcall/freebayes/{aligner}~{ref}~{sampleset}/{region}.benchmark"
     priority: 1  # get them done earlier, normalisation is super quick
     params:
         theta=config["varcall"].get("theta_prior", 0.01),
@@ -113,16 +87,16 @@ rule freebayes:
 
 rule mpileup:
     input:
-        bam="data/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
-        bai="data/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
-        sset="data/samplelists/{sampleset}.txt",
+        bam="output/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
+        bai="output/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
+        sset="output/samplelists/{sampleset}.txt",
         ref=lambda wc: config['refs'][wc.ref],
     output:
-        bcf="data/variants/raw_split/mpileup~{aligner}~{ref}~{sampleset}/{region}.bcf",
+        bcf="output/variants/raw_split/mpileup~{aligner}~{ref}~{sampleset}/{region}.bcf",
     log:
-        "log/varcall/mpileup/{aligner}~{ref}~{sampleset}/{region}.log"
+        "output/log/varcall/mpileup/{aligner}~{ref}~{sampleset}/{region}.log"
     benchmark:
-        "log/varcall/mpileup/{aligner}~{ref}~{sampleset}/{region}.benchmark"
+        "output/log/varcall/mpileup/{aligner}~{ref}~{sampleset}/{region}.benchmark"
     params:
         theta=config["varcall"].get("theta_prior", 0.01),
         minmq=lambda wc: config["varcall"]["minmapq"].get(wc.aligner, 5),
@@ -152,13 +126,13 @@ rule mpileup:
 
 rule bcffilter:
     input:
-        bcf="data/variants/raw_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf",
+        bcf="output/variants/raw_split/{caller}~{aligner}~{ref}~{sampleset}/{region}.bcf",
         ref=lambda wc: config['refs'][wc.ref],
     output:
         # Not a pipe! can't run all regions separately if this is a pipe into merge
-        bcf="data/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
+        bcf="output/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
     log:
-        "log/varcall/bcffilter/{caller}~{aligner}~{ref}~{sampleset}/{filter}/{region}.log"
+        "output/log/varcall/bcffilter/{caller}~{aligner}~{ref}~{sampleset}/{filter}/{region}.log"
     params:
         filtarg=lambda wc: config["varcall"]["filters"][wc.filter].replace('\n', ' ')
     shell:
@@ -172,11 +146,11 @@ rule bcffilter:
 localrules: bcfmerge_fofn
 rule bcfmerge_fofn:
     input:
-        bcf=lambda wc: expand("data/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
+        bcf=lambda wc: expand("output/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
                               caller=wc.caller, aligner=wc.aligner, ref=wc.ref, sampleset=wc.sampleset, filter=wc.filter,
                               region=sorted(VARCALL_REGIONS[wc.ref])),
     output:
-        fofn=temp("data/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf.INPUT_FOFN"),
+        fofn=temp("output/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf.INPUT_FOFN"),
     run:
         with open(output[0], "w") as fh:
             for s in sorted(input):
@@ -184,14 +158,14 @@ rule bcfmerge_fofn:
 
 rule bcfmerge:
     input:
-        bcf=lambda wc: expand("data/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
+        bcf=lambda wc: expand("output/variants/filter_split/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}/{region}.bcf",
                               caller=wc.caller, aligner=wc.aligner, ref=wc.ref, sampleset=wc.sampleset, filter=wc.filter,
                               region=sorted(VARCALL_REGIONS[wc.ref])),
-        fofn="data/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf.INPUT_FOFN",
+        fofn="output/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf.INPUT_FOFN",
     output:
-        bcf="data/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf",
+        bcf="output/variants/final/{caller}~{aligner}~{ref}~{sampleset}~filtered-{filter}.bcf",
     log:
-        "log/varcall/mergebcf/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}.log"
+        "output/log/varcall/mergebcf/{caller}~{aligner}~{ref}~{sampleset}_filtered~{filter}.log"
     threads: 4
     shell:
         "( bcftools concat"
@@ -208,7 +182,7 @@ rule bcf2vcf:
     output:
         vcf="{path}.vcf.gz",
     log:
-        "log/varcall/bcf2vcf/{path}.log"
+        "output/log/varcall/bcf2vcf/{path}.log"
     threads: 4
     shell:
         "( bcftools view"
@@ -228,8 +202,8 @@ rule variantidx:
 
 rule varstats:
     input:
-        "data/variants/{path}"
+        "output/variants/{path}"
     output:
-        "data/stats/variants/{path}.varstats"
+        "output/stats/variants/{path}.varstats"
     shell:
         "bcftools stats -s - -d 0,1000,2 --threads {threads} {input} >{output}"

@@ -1,12 +1,19 @@
+#######################################################################
+#                            Annotation                               #
+#######################################################################
 
 rule snpeff:
     input:
-        "data/variants/final/freebayes~bwa~genome~all_samples~filtered-default.vcf.gz",
+        expand("output/variants/final/freebayes~{aligner}~{ref}~{sampleset}~filtered-{filter}.vcf.gz",
+               aligner=config["varcall"]["aligners"],
+               ref=config["varcall"]["refs"],
+               sampleset=config["varcall"]["samplesets"],
+               filter = config['snpeff']['filter']),
     output:
-        vcf="annotated/all.vcf.gz",
-        csvstats="snpeff/all.csv"
+        vcf="output/snpeff/annotated/all.vcf.gz",
+        csvstats="output/snpeff/annotated/all.csv"
     log:
-        "data/log/snpeff/snpeff.log"
+        "output/log/snpeff/snpeff.log"
     params:
         reference=config["snpeff"]['name'],
         extra="-Xmx6g"

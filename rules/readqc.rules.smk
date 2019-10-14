@@ -6,17 +6,17 @@
 
 rule qc_runlib:
     input:
-        ["data/reads/runs/{run}/{lib}.fastq.gz".format(run=run, lib=lib)
+        ["output/reads/runs/{run}/{lib}.fastq.gz".format(run=run, lib=lib)
 		for run, lib in RUNLIB2SAMP],
 
 rule read_stats:
     input:
-        "data/stats/reads/readnum_librun.tsv",
-        "data/stats/reads/readnum_samples.tsv",
+        "output/stats/reads/readnum_librun.tsv",
+        "output/stats/reads/readnum_samples.tsv",
 
 rule qc_samples:
     input:
-        expand("data/reads/samples/{sample}.fastq.gz", sample=SAMP2RUNLIB),
+        expand("output/reads/samples/{sample}.fastq.gz", sample=SAMP2RUNLIB),
 
 rule readqc:
     input:
@@ -32,13 +32,11 @@ ruleorder: qcreads_il > qcreads
 rule qcreads:
     input:
         unpack(get_fr_fastq)
-        #r1="rawdata/runs/{run}/{lib}_R1.fastq.gz",
-        #r2="rawdata/runs/{run}/{lib}_R2.fastq.gz",
     output:
-        reads="data/reads/runs/{run}/{lib}.fastq.gz",
+        reads="output/reads/runs/{run}/{lib}.fastq.gz",
     log:
-        log="log/adapterremoval/{run}/{lib}.log",
-        settings="data/stats/adapterremoval/{run}/{lib}.txt",
+        log="output/log/adapterremoval/{run}/{lib}.log",
+        settings="output/stats/adapterremoval/{run}/{lib}.txt",
     threads:
         7
     params:
@@ -72,10 +70,10 @@ rule qcreads_il:
     input:
         unpack(get_il_fastq),
     output:
-        reads="data/reads/runs/{run}/{lib}.fastq.gz",
+        reads="output/reads/runs/{run}/{lib}.fastq.gz",
     log:
-        log="log/adapterremoval/{run}/{lib}.log",
-        settings="data/stats/adapterremoval/{run}/{lib}.txt",
+        log="output/log/adapterremoval/{run}/{lib}.log",
+        settings="output/stats/adapterremoval/{run}/{lib}.txt",
     threads:
         7
     params:
@@ -107,25 +105,25 @@ rule qcreads_il:
 localrules: samplefastq
 rule samplefastq:
     input:
-        lambda wc: ["data/reads/runs/{run}/{lib}.fastq.gz".format(run=r, lib=l) for r, l in SAMP2RUNLIB[wc.sample]],
+        lambda wc: ["output/reads/runs/{run}/{lib}.fastq.gz".format(run=r, lib=l) for r, l in SAMP2RUNLIB[wc.sample]],
     output:
-        "data/reads/samples/{sample}.fastq.gz"
+        "output/reads/samples/{sample}.fastq.gz"
     log:
-        "log/samplefastq/{sample}.log"
+        "output/log/samplefastq/{sample}.log"
     threads: 1
     shell:
         "cat {input} > {output}"
 
 rule read_count_librun:
     input:
-        ["data/reads/runs/{run}/{lib}.fastq.gz".format(run=run, lib=lib)
+        ["output/reads/runs/{run}/{lib}.fastq.gz".format(run=run, lib=lib)
 		for run, lib in RUNLIB2SAMP],
     output:
-        "data/stats/reads/readnum_librun.tsv",
+        "output/stats/reads/readnum_librun.tsv",
     threads:
         28
     log:
-        "log/readstats/seqhax-stats-librun.log",
+        "output/log/readstats/seqhax-stats-librun.log",
     shell:
         "( seqhax stats"
         "    -t {threads}"
@@ -136,13 +134,13 @@ rule read_count_librun:
 
 rule read_count_sample:
     input:
-    	expand("data/reads/samples/{sample}.fastq.gz", sample=SAMP2RUNLIB),
+    	expand("output/reads/samples/{sample}.fastq.gz", sample=SAMP2RUNLIB),
     output:
-        "data/stats/reads/readnum_samples.tsv",
+        "output/stats/reads/readnum_samples.tsv",
     threads:
         27
     log:
-        "log/readstats/seqhax-stats-sample.log",
+        "output/log/readstats/seqhax-stats-sample.log",
     shell:
         "( seqhax stats"
         "    -t {threads}"

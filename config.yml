@@ -1,6 +1,20 @@
 
 samples: "metadata/sample2runlib.csv"
 
+sample_sets: []
+
+refs:
+  Sorghum_bicolor_NCBIv3.42: genomes_and_annotations/Sorghum_bicolor_NCBIv3.42/Sorghum_bicolor_NCBIv3.42.fa
+  Sorghum: genomes_and_annotations/Sorghum/Sorghum.fa
+
+snpeff:
+  name: Sorghum_bicolor_NCBIv3.42
+  #Sorghum_bicolor_NCBIv3.42: genomes_and_annotations/Sorghum/Sorghum_bicolor.Sorghum_bicolor_NCBIv3.42.gtf.gz
+  filter: strict
+
+# Path to any database of known variants, ideally as it is provided by the GATK bundle.
+# known-variants: genomes_and_annotations/Sorghum/Sbicolor_Patterson_454.vcf.gz
+
 qc:
   _DEFAULT_:
     adapter1: CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG
@@ -11,27 +25,29 @@ qc:
     adapter2: CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT
     minqual: 25
 
-sample_sets: []
-
-
-refs:
-  Sorghum: genomes_and_annotations/genomes/Sorghum/genome.fa
-
 
 mapping:
   aligners:
     - bwa
   refs:
-    - Sorghum
+    - Sorghum_bicolor_NCBIv3.42
   samplesets:
     - all_samples
   ngm:
     sensitivity: 0.5
 
 
-snpeff:
-  name: Sorghum_bicolor_NCBIv3.42
-  Sorghum: genomes_and_annotations/snpeffdata/genomes/Sorghum_bicolor_NCBIv3.42.fa.gz
+abra2:
+  memory:
+    - Xmx6g
+  release:
+    - envs/abra2.jar
+  temp:
+    - /tmp
+  threads:
+    - 10
+  regions:
+    - metadata/contigs_of_interest.bed
 
 
 denovodist:
@@ -39,10 +55,11 @@ denovodist:
   mash_sketchsize: 1e5
   sourmash_sketchsize: 1e5
   ksize: 21
-  kwip_sets: [] 
+  kwip_sets: []
   mash_sets: # we can subset from everything for (sour)mash
     - all_samples
   sourmash_sets: []
+
 
 varcall:
   minmapq:
@@ -54,10 +71,10 @@ varcall:
   aligners:
     - bwa
   callers:
-    #- mpileup
+    - mpileup
     - freebayes
   refs:
-    - Sorghum
+    - Sorghum_bicolor_NCBIv3.42
   samplesets:
     - all_samples
   filters:

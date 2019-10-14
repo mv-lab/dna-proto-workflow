@@ -4,20 +4,26 @@ from glob import glob
 from os.path import basename, splitext
 import os
 from sys import stderr
+from utils.check_config import readconfig, pconfig
+
+config = readconfig('config.yml')
 
 
 def create_contigs_file():
     ''' Prepare contigs of interest (bed)'''
     is_contigs = os.path.exists('metadata/contigs_of_interest.bed')
+    path = list(config['refs'].values())[0] # 1st reference
     if not is_contigs:
-        os.system(r'awk -f utils/contigs.bed.awk genomes_and_annotations/genomes/Sorghum/genome.fa.fai > metadata/contigs_of_interest.bed')
+        os.system(r'awk -f utils/contigs.bed.awk {}.fai > metadata/contigs_of_interest.bed'.format(path))
 
 
 def create_fai():
     ''' Index reference (fai)'''
-    is_fai = os.path.exists('rawdata/reference/genome.fa.fai')
-    if not is_fai:
-        os.system('samtools faidx genomes_and_annotations/genomes/Sorghum/genome.fa ')
+    files = glob('genomes_and_annotations/*/*.fa')
+    for reference in files:
+        is_fai = os.path.exists('{}.fai'.format(reference))
+        if not is_fai:
+            os.system('samtools faidx {}'.format(reference))
 
 
 def parsefai(fai):
@@ -26,6 +32,7 @@ def parsefai(fai):
             cname, clen, _, _, _ = l.split()
             clen = int(clen)
             yield cname, clen
+
 
 def parsebed(bed):
     names = []
@@ -94,8 +101,8 @@ def make_runlib2samp(s2rl_file):
         samp = run["sample"]
         rl2s[rl] = samp
         s2rl[samp].append(rl)
-    print ('RUNLIB2SAMP: ',dict(rl2s))
-    print ('SAMP2RUNLIB: ',dict(s2rl))
+    #print ('RUNLIB2SAMP: ',dict(rl2s))
+    #print ('SAMP2RUNLIB: ',dict(s2rl))
     return dict(rl2s), dict(s2rl)
 
 
@@ -118,12 +125,12 @@ def make_samplesets(s2rl_file, setfile_glob):
         everything.update(samples)
     ssets["all_samples"] = everything
 
-    if not os.path.exists("data/samplelists"):
-        os.makedirs("data/samplelists", exist_ok=True)
-    with open("data/samplelists/GENERATED_FILES_DO_NOT_EDIT", "w") as fh:
+    if not os.path.exists("output/samplelists"):
+        os.makedirs("output/samplelists", exist_ok=True)
+    with open("output/samplelists/GENERATED_FILES_DO_NOT_EDIT", "w") as fh:
         print("you're probably looking for", setfile_glob, file=fh)
     for setname, setsamps in ssets.items():
-        fname = "data/samplelists/{}.txt".format(setname)
+        fname = "output/samplelists/{}.txt".format(setname)
         try:
             with open(fname) as fh:
                 currsamps = set([l.strip() for l in fh])
@@ -135,5 +142,5 @@ def make_samplesets(s2rl_file, setfile_glob):
                 for s in sorted(setsamps):
                     print(s, file=fh)
 
-    print ('SAMPLESETS: ', {n: list(sorted(set(s))) for n, s in ssets.items()} )
+    #print ('SAMPLESETS: ', {n: list(sorted(set(s))) for n, s in ssets.items()} )
     return {n: list(sorted(set(s))) for n, s in ssets.items()}
