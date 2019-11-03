@@ -80,17 +80,13 @@ rule qcreads_il:
         adp1=lambda wc: config["qc"].get(wc.run, config["qc"]["_DEFAULT_"])["adapter1"],
         adp2=lambda wc: config["qc"].get(wc.run, config["qc"]["_DEFAULT_"])["adapter2"],
         minqual=lambda wc: config["qc"].get(wc.run, config["qc"]["_DEFAULT_"])["minqual"],
+        extra = config['qc']['extra']
     shell:
         "( AdapterRemoval"
         "   --file1 {input}"
         "   --adapter1 {params.adp1}"
         "   --adapter2 {params.adp2}"
-        "   --combined-output"
-        "   --interleaved"
-        "   --interleaved-output"
-        "   --trimns"
-        "   --trimqualities"
-        "   --trimwindows 10"
+        "   {params.extra}"
         "   --minquality {params.minqual}"
         "   --threads 2"
         "   --settings {log.settings}"

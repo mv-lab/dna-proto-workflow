@@ -3,6 +3,11 @@ samples: "metadata/sample2runlib.csv"
 
 sample_sets: []
 
+# mode: s or c
+#   s = samples
+#   c = cohort
+mode: s
+
 refs:
   Sorghum_bicolor_NCBIv3.42: genomes_and_annotations/Sorghum_bicolor_NCBIv3.42/Sorghum_bicolor_NCBIv3.42.fa
   Sorghum: genomes_and_annotations/Sorghum/Sorghum.fa
@@ -24,6 +29,7 @@ qc:
     adapter1: CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG
     adapter2: CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT
     minqual: 25
+  extra: "--combined-output --interleaved --interleaved-output --trimns --trimqualities --trimwindows 10"
 
 
 mapping:
@@ -35,7 +41,6 @@ mapping:
     - all_samples
   ngm:
     sensitivity: 0.5
-
 
 abra2:
   memory:
@@ -49,6 +54,13 @@ abra2:
   regions:
     - metadata/contigs_of_interest.bed
 
+
+LB-impute:
+  mem: Xmx3g
+  release: envs/LB-Impute.jar
+  method: impute
+  extra: "-readerr  0.05 -genotypeerr 0.05 -recombdist 1000000 -window 5 -offspringimpute "
+  parents: "D2,con"
 
 denovodist:
   kwip_sketchsize: 1e9
@@ -70,8 +82,9 @@ varcall:
   chunksize: 1000000
   aligners:
     - bwa
+    #- ngm
   callers:
-    - mpileup
+    #- mpileup
     - freebayes
   refs:
     - Sorghum_bicolor_NCBIv3.42

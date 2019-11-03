@@ -11,3 +11,7 @@ output/*
 
 # rawdata (size problem)
 genomes_and_annotations/snpeffdata/
+
+# Notes and experiments
+todo
+test.R

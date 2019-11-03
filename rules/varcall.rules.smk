@@ -45,10 +45,8 @@ rule freebayes:
     input:
         bam = "output/abra/{aligner}~{ref}~{sampleset}.bam",
         bai = "output/abra/{aligner}~{ref}~{sampleset}.bam.bai",
-        #bam="output/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
-        #bai="output/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
         sset="output/samplelists/{sampleset}.txt",
-        #sset="output/samplelists/test.txt",
+        #sset="output/samplelists/cohort.txt",
         ref=lambda wc: config['refs'][wc.ref],
     output:
         bcf="output/variants/raw_split/freebayes~{aligner}~{ref}~{sampleset}/{region}.bcf",
@@ -87,8 +85,8 @@ rule freebayes:
 
 rule mpileup:
     input:
-        bam="output/alignments/sets/{aligner}~{ref}~all_samples.bam",  # use the megabam, see above
-        bai="output/alignments/sets/{aligner}~{ref}~all_samples.bam.bai",
+        bam = "output/abra/{aligner}~{ref}~{sampleset}.bam",
+        bai = "output/abra/{aligner}~{ref}~{sampleset}.bam.bai",
         sset="output/samplelists/{sampleset}.txt",
         ref=lambda wc: config['refs'][wc.ref],
     output:
@@ -176,7 +174,7 @@ rule bcfmerge:
         " ) >{log} 2>&1"
 
 
-rule bcf2vcf:
+rule bcf2vcfgz:
     input:
         bcf="{path}.bcf",
     output:
@@ -188,6 +186,22 @@ rule bcf2vcf:
         "( bcftools view"
         "   {input.bcf}"
         "   -O z"
+        "   --threads {threads}"
+        "   -o {output.vcf}"
+        " ) >{log} 2>&1"
+
+rule bcf2vcf:
+    input:
+        bcf="{path}.bcf",
+    output:
+        vcf="{path}.vcf",
+    log:
+        "output/log/varcall/bcf2vcf/{path}.log"
+    threads: 4
+    shell:
+        "( bcftools view"
+        "   {input.bcf}"
+        "   -O v"
         "   --threads {threads}"
         "   -o {output.vcf}"
         " ) >{log} 2>&1"

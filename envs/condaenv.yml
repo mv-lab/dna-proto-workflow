@@ -3,6 +3,7 @@ channels:
   - defaults
   - bioconda
   - conda-forge
+  - r
 dependencies:
   - python=3.*
   - snakemake
@@ -20,4 +21,8 @@ dependencies:
   - pandas =0.23
   - seaborn =0.8
   - r-rgl
+  - r-devtools
   - rust
+  - khmer
+  - r-ggplot2
+  - r-vcfr

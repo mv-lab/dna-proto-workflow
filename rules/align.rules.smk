@@ -36,7 +36,8 @@ rule align_stats:
 rule align:
    input:
         rules.align_samples.input,
-        rules.align_stats.output,
+        expand("output/alnstats/everything_{type}.csv",
+               type=["SN", "IS", "COV"]),
         expand("output/alignments/sets/{aligner}~{ref}~all_samples.bam",
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"]),
@@ -53,31 +54,6 @@ rule align:
 
 
 ##### Actual rules #####
-
-rule ngmap:
-    input:
-        reads="output/reads/runs/{run}/{lib}.fastq.gz",
-        ref=lambda wc: config['refs'][wc.ref],
-    output:
-        bam=temp("output/alignments/byrun.raw/ngm/{ref}/{run}/{lib}.bam"),
-    log:
-        "output/log/align/ngm/{ref}/{run}/{lib}.log"
-    threads:
-        8
-    params:
-        sample=lambda wc: RUNLIB2SAMP.get((wc.run, wc.lib), "{}~{}".format(wc.run, wc.lib)),
-        sensitivity=config["mapping"]["ngm"]["sensitivity"],
-    shell:
-        "( ngm"
-        "   -q {input.reads}"
-        "   --paired --broken-pairs"
-        "   -r {input.ref}"
-        "   -t {threads}"
-        "   --rg-id {wildcards.run}_{wildcards.lib}"
-        "   --rg-sm {params.sample}"
-        "   --sensitivity {params.sensitivity}" # this is the mean from a bunch of different runs
-        "| samtools view -Suh - >{output.bam}"
-        " ) >{log} 2>&1"
 
 rule bwamem:
     input:
@@ -304,3 +280,28 @@ rule align_samplesets_all:
                ref=config["mapping"]["refs"],
                aligner=config["mapping"]["aligners"],
                sampleset=allsets),
+
+rule ngmap:
+    input:
+        reads="output/reads/runs/{run}/{lib}.fastq.gz",
+        ref=lambda wc: config['refs'][wc.ref],
+    output:
+        bam=temp("output/alignments/byrun.raw/ngm/{ref}/{run}/{lib}.bam"),
+    log:
+        "output/log/align/ngm/{ref}/{run}/{lib}.log"
+    threads:
+        8
+    params:
+        sample=lambda wc: RUNLIB2SAMP.get((wc.run, wc.lib), "{}~{}".format(wc.run, wc.lib)),
+        sensitivity=config["mapping"]["ngm"]["sensitivity"],
+    shell:
+        "( ngm"
+        "   -q {input.reads}"
+        "   --paired --broken-pairs"
+        "   -r {input.ref}"
+        "   -t {threads}"
+        "   --rg-id {wildcards.run}_{wildcards.lib}"
+        "   --rg-sm {params.sample}"
+        "   --sensitivity {params.sensitivity}" # this is the mean from a bunch of different runs
+        "| samtools view -Suh - >{output.bam}"
+        " ) >{log} 2>&1"

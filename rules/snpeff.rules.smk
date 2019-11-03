@@ -19,3 +19,12 @@ rule snpeff:
         extra="-Xmx6g"
     wrapper:
         "0.27.1/bio/snpeff"
+
+
+rule prepare_database:
+    input:
+        name= config['snpeff']['name'],
+    output:
+        dir(expand("genomes_and_annotations/snpeffdata/{name}", name= config['snpeff']['name']))
+    shell:
+        "mkdir genomes_and_annotations/snpeffdata/{input.name}"
