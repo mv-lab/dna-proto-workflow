@@ -1,28 +1,29 @@
-name: paneuc
+#name: paneuc
 channels:
   - defaults
   - bioconda
   - conda-forge
-  - r
+#  - r
 dependencies:
   - python=3.*
   - snakemake
+  - yamlordereddictloader
   - bwa
   - freebayes
   - vt
   - samtools
   - bcftools
   - bedops
-  - qualimap
   - AdapterRemoval
   - seqhax
   - pigz
   - matplotlib =2.2
   - pandas =0.23
   - seaborn =0.8
-  - r-rgl
-  - r-devtools
   - rust
   - khmer
-  - r-ggplot2
-  - r-vcfr
+  - kwip
+  - mash
+  - pysam
+  - nextgenmap
+  - sourmash

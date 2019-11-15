@@ -16,7 +16,7 @@ rule snpeff:
         "output/log/snpeff/snpeff.log"
     params:
         reference=config["snpeff"]['name'],
-        extra="-Xmx6g"
+        extra="-Xmx6g -v"
     wrapper:
         "0.27.1/bio/snpeff"
 

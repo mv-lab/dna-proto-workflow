@@ -26,13 +26,22 @@ rule mash:
                sketchsize=config["denovodist"]["mash_sketchsize"],
                set=config["denovodist"]["mash_sets"]),
 
-rule pca:
+rule pca_mash:
     input:
-        rules.mash.input,
+        rules.mash.input, 
     output:
-        "output/plots/denovo/mash/pca.pdf"
+        "output/plots/denovo/mash/pca.pdf", 
     script:
         "../scripts/pca.R"
+
+rule pca_kwip:
+    input:
+        rules.kwip.input,
+    output:
+        "output/plots/denovo/kwip/pca.pdf",
+    script:
+        "../scripts/pca.R"
+
 
 
 rule denovo:
@@ -40,8 +49,8 @@ rule denovo:
         rules.kwip.input,
         rules.mash.input,
         rules.sourmash.input,
-        rules.pca.output,
-
+        rules.pca_mash.output,
+	rules.pca_kwip.output,
 
 ##### Actual rules #####
 
