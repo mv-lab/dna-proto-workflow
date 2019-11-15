@@ -10,7 +10,9 @@ output/*
 !output/readme
 
 # rawdata (size problem)
-genomes_and_annotations/snpeffdata/
+genomes_and_annotations/*
+!genomes_and_annotations/readme
+
 
 # Notes and experiments
 todo
