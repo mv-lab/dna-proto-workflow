@@ -32,7 +32,7 @@ rule pca_mash:
     output:
         "output/plots/denovo/mash/pca.pdf", 
     script:
-        "../scripts/pca.R"
+        "../scripts/pca_mash.R"
 
 rule pca_kwip:
     input:
@@ -40,7 +40,7 @@ rule pca_kwip:
     output:
         "output/plots/denovo/kwip/pca.pdf",
     script:
-        "../scripts/pca.R"
+        "../scripts/pca_kwip.R"
 
 
 
