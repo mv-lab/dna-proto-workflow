@@ -165,7 +165,7 @@ rule qualimap_samp:
     input:
         bam="output/alignments/samples/{aligner}/{ref}/{sample}.bam",
     output:
-        "output/alignments/qualimap/samples/{aligner}~{ref}~{sample}/",
+        directory("output/alignments/qualimap/samples/{aligner}~{ref}~{sample}/"),
     log:
         "output/log/align/qualimap_sample/{aligner}~{ref}~{sample}.log"
     threads: 4
